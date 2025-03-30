@@ -1,0 +1,16 @@
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\DataEntity.dll.config
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\DataEntity.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\DataEntity.pdb
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\AutoMapper.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\EntityFramework.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\AutoMapper.xml
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\EntityFramework.xml
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\obj\Debug\DataEntity.csproj.AssemblyReference.cache
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\obj\Debug\DataEntity.csproj.CoreCompileInputs.cache
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\obj\Debug\DataEntity.csproj.CopyComplete
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\obj\Debug\DataEntity.dll
+C:\Users\tutis\OneDrive\Desktop\GAU\s6\web_api\OnlineCinemaManagement\DataEntity\obj\Debug\DataEntity.pdb

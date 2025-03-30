@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="CinemaService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:64919/CinemaService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:64919/CinemaService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:64919/CinemaService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DataEntity" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICinemaService_GetAllShowtimes_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllShowtimes" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetAllShowtimes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllShowtimesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetShowtimeById_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetShowtimeById" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetShowtimeById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetShowtimeByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_AddShowtime_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddShowtime" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_AddShowtime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddShowtimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_UpdateShowtime_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateShowtime" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_UpdateShowtime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateShowtimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_DeleteShowtime_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteShowtime" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_DeleteShowtime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteShowtimeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICinemaService">
+    <wsdl:operation name="GetAllShowtimes">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/GetAllShowtimes" message="tns:ICinemaService_GetAllShowtimes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/GetAllShowtimesResponse" message="tns:ICinemaService_GetAllShowtimes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetShowtimeById">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/GetShowtimeById" message="tns:ICinemaService_GetShowtimeById_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/GetShowtimeByIdResponse" message="tns:ICinemaService_GetShowtimeById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddShowtime">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/AddShowtime" message="tns:ICinemaService_AddShowtime_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/AddShowtimeResponse" message="tns:ICinemaService_AddShowtime_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateShowtime">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/UpdateShowtime" message="tns:ICinemaService_UpdateShowtime_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/UpdateShowtimeResponse" message="tns:ICinemaService_UpdateShowtime_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteShowtime">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/DeleteShowtime" message="tns:ICinemaService_DeleteShowtime_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/DeleteShowtimeResponse" message="tns:ICinemaService_DeleteShowtime_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ICinemaService" type="tns:ICinemaService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetAllShowtimes">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/GetAllShowtimes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetShowtimeById">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/GetShowtimeById" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddShowtime">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/AddShowtime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateShowtime">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/UpdateShowtime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteShowtime">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/DeleteShowtime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CinemaService">
+    <wsdl:port name="BasicHttpBinding_ICinemaService" binding="tns:BasicHttpBinding_ICinemaService">
+      <soap:address location="http://localhost:64919/CinemaService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

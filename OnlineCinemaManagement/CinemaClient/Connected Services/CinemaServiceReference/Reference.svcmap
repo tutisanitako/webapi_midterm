@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="5c848cc7-7a4f-456f-8f76-9d574babe1e0" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:64919/CinemaService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CinemaService.disco" MetadataType="Disco" ID="a90fcbae-0264-495c-927f-84682e78afbe" SourceId="1" SourceUrl="http://localhost:64919/CinemaService.svc?disco" />
+    <MetadataFile FileName="CinemaService.xsd" MetadataType="Schema" ID="8b09b7d3-b3d3-45e6-87a2-a1089c90d45a" SourceId="1" SourceUrl="http://localhost:64919/CinemaService.svc?xsd=xsd1" />
+    <MetadataFile FileName="CinemaService1.xsd" MetadataType="Schema" ID="d2b99b08-db30-4766-a227-0a0f0ab3705e" SourceId="1" SourceUrl="http://localhost:64919/CinemaService.svc?xsd=xsd0" />
+    <MetadataFile FileName="CinemaService.wsdl" MetadataType="Wsdl" ID="05827138-a30f-45d5-8c26-ec8a2d82a31b" SourceId="1" SourceUrl="http://localhost:64919/CinemaService.svc?wsdl" />
+    <MetadataFile FileName="CinemaService2.xsd" MetadataType="Schema" ID="7e27c6ca-8e4e-409f-9070-5f01d7b77820" SourceId="1" SourceUrl="http://localhost:64919/CinemaService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
