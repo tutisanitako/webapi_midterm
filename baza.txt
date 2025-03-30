@@ -1,0 +1,108 @@
+CREATE DATABASE OnlineCinemacs;
+GO
+USE OnlineCinemacs;
+
+CREATE TABLE Genres (
+    GenreID INT PRIMARY KEY IDENTITY,
+    GenreName NVARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE Movies (
+   MovieID INT PRIMARY KEY IDENTITY,
+   Title NVARCHAR(100) NOT NULL,
+   Genre INT FOREIGN KEY REFERENCES Genres(GenreID),
+   Duration INT,
+   ReleaseDate DATE,
+   Language NVARCHAR(50)
+);
+
+
+CREATE TABLE Halls (
+   HallID INT PRIMARY KEY IDENTITY,
+   HallName NVARCHAR(100) NOT NULL,
+   Capacity INT
+);
+
+CREATE TABLE Showtimes (
+   ShowtimeID INT PRIMARY KEY IDENTITY,
+   MovieID INT FOREIGN KEY REFERENCES Movies(MovieID),
+   HallID INT FOREIGN KEY REFERENCES Halls(HallID),
+   Showtime DATETIME NOT NULL,
+   TicketPrice DECIMAL(10, 2) NOT NULL
+);
+
+
+CREATE TABLE Users (
+   UserID INT PRIMARY KEY IDENTITY,
+   FullName NVARCHAR(100),
+   UserName NVARCHAR(100) NOT NULL,
+   Email NVARCHAR(100) UNIQUE NOT NULL CHECK (Email LIKE '%@%.%'),
+   Password NVARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE Bookings (
+   BookingID INT PRIMARY KEY IDENTITY,
+   UserID INT FOREIGN KEY REFERENCES Users(UserID),
+   ShowtimeID INT FOREIGN KEY REFERENCES Showtimes(ShowtimeID),
+   NumberOfTickets INT,
+   BookingDate DATETIME DEFAULT GETDATE()
+);
+
+
+CREATE TABLE SeatAssignments (
+   AssignmentID INT PRIMARY KEY IDENTITY,
+   BookingID INT FOREIGN KEY REFERENCES Bookings(BookingID),
+   SeatNumber NVARCHAR(10)
+);
+
+go
+
+INSERT INTO Genres (GenreName) 
+VALUES 
+('Comedy'),
+('Drama'),
+('Horror'),
+('Romance'),
+('Sci-Fi');
+
+
+INSERT INTO Movies (Title, Genre, Duration, ReleaseDate, Language)
+VALUES 
+('Blade Runner 2049', 5, 163, '2017-10-06', 'English'),
+('The Hangover', 1, 100, '2009-06-05', 'English'),
+('The Notebook', 4, 123, '2004-06-25', 'English'),
+('Interstellar', 5, 169, '2014-11-07', 'English');
+
+
+INSERT INTO Halls (HallName, Capacity) 
+VALUES 
+('Hall 1', 100),
+('Hall 2', 150),
+('Hall 3', 200),
+('Hall 4', 120);
+
+
+INSERT INTO Showtimes (MovieID, HallID, Showtime, TicketPrice) 
+VALUES 
+(1, 1, '2024-12-01 18:00:00', 15.00),
+(2, 2, '2024-12-01 20:00:00', 9.99),
+(3, 3, '2024-12-02 14:00:00', 20.00),
+(4, 4, '2024-12-02 16:00:00', 13.00);
+
+INSERT INTO Users (FullName, UserName, Email, Password) 
+VALUES 
+('John Doe', 'johndoe', 'john.doe@example.com', 'password123'),
+('Bob Brown', 'bobbrown', 'bob.brown@example.com', 'bobpass');
+
+INSERT INTO Bookings (UserID, ShowtimeID, NumberOfTickets)
+VALUES 
+(1, 1, 2),
+(2, 3, 1);
+
+INSERT INTO SeatAssignments (BookingID, SeatNumber)
+VALUES 
+(1, 'A1'),
+(1, 'A2'),
+(2, 'B1');
