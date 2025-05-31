@@ -383,6 +383,10 @@
     <Compile Include="Migrations\202505310120561_UpdateDatabaseSchema.designer.cs">
       <DependentUpon>202505310120561_UpdateDatabaseSchema.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202505310935491_NewatGau.cs" />
+    <Compile Include="Migrations\202505310935491_NewatGau.designer.cs">
+      <DependentUpon>202505310935491_NewatGau.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\DTOs\GameResponse.cs" />
@@ -549,6 +553,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202505310120561_UpdateDatabaseSchema.resx">
       <DependentUpon>202505310120561_UpdateDatabaseSchema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505310935491_NewatGau.resx">
+      <DependentUpon>202505310935491_NewatGau.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
