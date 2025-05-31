@@ -11,10 +11,10 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using Wordle_hw.Areas.HelpPage.ModelDescriptions;
-using Wordle_hw.Areas.HelpPage.Models;
+using WordleAPI.Areas.HelpPage.ModelDescriptions;
+using WordleAPI.Areas.HelpPage.Models;
 
-namespace Wordle_hw.Areas.HelpPage
+namespace WordleAPI.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Wordle_hw.Areas.HelpPage.ModelDescriptions
+namespace WordleAPI.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Describes a type model.

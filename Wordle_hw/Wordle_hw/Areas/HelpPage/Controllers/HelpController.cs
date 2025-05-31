@@ -1,10 +1,10 @@
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
-using Wordle_hw.Areas.HelpPage.ModelDescriptions;
-using Wordle_hw.Areas.HelpPage.Models;
+using WordleAPI.Areas.HelpPage.ModelDescriptions;
+using WordleAPI.Areas.HelpPage.Models;
 
-namespace Wordle_hw.Areas.HelpPage.Controllers
+namespace WordleAPI.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

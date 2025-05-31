@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace Wordle_hw.Areas.HelpPage
+namespace WordleAPI.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

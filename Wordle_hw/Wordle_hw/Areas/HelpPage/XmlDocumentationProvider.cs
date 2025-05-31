@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 using System.Xml.XPath;
-using Wordle_hw.Areas.HelpPage.ModelDescriptions;
+using WordleAPI.Areas.HelpPage.ModelDescriptions;
 
-namespace Wordle_hw.Areas.HelpPage
+namespace WordleAPI.Areas.HelpPage
 {
     /// <summary>
     /// A custom <see cref="IDocumentationProvider"/> that reads the API documentation from an XML documentation file.

@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Wordle_hw.Areas.HelpPage.ModelDescriptions
+namespace WordleAPI.Areas.HelpPage.ModelDescriptions
 {
     public class ComplexTypeModelDescription : ModelDescription
     {

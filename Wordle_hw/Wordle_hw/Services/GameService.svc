@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WordleAPI.Services.GameService" CodeBehind="GameService.svc.cs" %>

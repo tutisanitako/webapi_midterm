@@ -3,7 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Http.Description;
 
-namespace Wordle_hw.Areas.HelpPage
+namespace WordleAPI.Areas.HelpPage
 {
     public static class ApiDescriptionExtensions
     {

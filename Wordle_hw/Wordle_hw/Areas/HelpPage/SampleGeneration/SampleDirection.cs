@@ -1,4 +1,4 @@
-namespace Wordle_hw.Areas.HelpPage
+namespace WordleAPI.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

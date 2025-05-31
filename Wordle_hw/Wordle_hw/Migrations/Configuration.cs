@@ -5,14 +5,14 @@
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Wordle_hw.Data.WordleDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Wordle_hw.Models.AppDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Wordle_hw.Data.WordleDbContext context)
+        protected override void Seed(Wordle_hw.Models.AppDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Wordle_hw")]
+[assembly: AssemblyTitle("WordleAPI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Wordle_hw")]
+[assembly: AssemblyProduct("WordleAPI")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("066672a2-2349-49c3-b4e3-871f6039e00f")]
+[assembly: Guid("430fe228-ad40-4d08-911a-7af9c9a8cae7")]
 
 // Version information for an assembly consists of the following four values:
 //

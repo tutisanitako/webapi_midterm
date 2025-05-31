@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Web.Http.Description;
-using Wordle_hw.Areas.HelpPage.ModelDescriptions;
+using WordleAPI.Areas.HelpPage.ModelDescriptions;
 
-namespace Wordle_hw.Areas.HelpPage.Models
+namespace WordleAPI.Areas.HelpPage.Models
 {
     /// <summary>
     /// The model that represents an API displayed on the help page.

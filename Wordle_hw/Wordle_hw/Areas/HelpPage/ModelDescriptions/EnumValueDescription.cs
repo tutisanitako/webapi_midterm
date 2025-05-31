@@ -1,4 +1,4 @@
-namespace Wordle_hw.Areas.HelpPage.ModelDescriptions
+namespace WordleAPI.Areas.HelpPage.ModelDescriptions
 {
     public class EnumValueDescription
     {
