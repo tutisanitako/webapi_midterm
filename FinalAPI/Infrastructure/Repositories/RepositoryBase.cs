@@ -1,7 +1,7 @@
 ﻿using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity; // Using System.Data.Entity for EF6
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,51 +9,45 @@ namespace Infrastructure.Repositories
 {
     public abstract class RepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext _context; // Changed to System.Data.Entity.DbContext
+        protected readonly DbContext _context;
 
         public RepositoryBase(DbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // Changed return type to Task<TEntity> and handle null explicitly
-        public Task<TEntity> GetByIdAsync(int id)
+        public async Task<TEntity> GetByIdAsync(int id)
         {
-            // For EF6 synchronous Find, wrap in Task.FromResult
-            return Task.FromResult(_context.Set<TEntity>().Find(id));
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        // Changed return type to Task<IEnumerable<TEntity>> to match IRepository
-        public Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            // For EF6 synchronous AsEnumerable, wrap in Task.FromResult
-            return Task.FromResult(_context.Set<TEntity>().AsEnumerable());
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
-        public Task AddAsync(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _context.Set<TEntity>().Add(entity);
-            _context.SaveChanges();
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChanges();
-            return Task.CompletedTask;
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            // Call the local GetByIdAsync for consistency in null check
-            var entity = _context.Set<TEntity>().Find(id); // Synchronous find for EF6
+            var entity = await _context.Set<TEntity>().FindAsync(id);
             if (entity != null)
             {
                 _context.Set<TEntity>().Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
-            return Task.CompletedTask;
         }
     }
 }

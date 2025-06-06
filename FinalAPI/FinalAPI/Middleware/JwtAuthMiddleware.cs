@@ -1,8 +1,10 @@
 ﻿using FinalAPI.Middleware;
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -19,15 +21,9 @@ namespace FinalAPI.Middleware
     {
         private readonly JwtTokenService _tokenService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JwtAuthMiddleware"/> class.
-        /// </summary>
-        public JwtAuthMiddleware()
+        public JwtAuthMiddleware(JwtTokenService tokenService)
         {
-            var secretKey = ConfigurationManager.AppSettings["JwtSecretKey"];
-            var issuer = ConfigurationManager.AppSettings["JwtIssuer"];
-            var audience = ConfigurationManager.AppSettings["JwtAudience"];
-            _tokenService = new JwtTokenService(secretKey, issuer, audience);
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
         /// <summary>
@@ -44,34 +40,36 @@ namespace FinalAPI.Middleware
         public async Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
         {
             var request = context.Request;
+            var authorizationHeader = request.Headers.Authorization;
+
+            Console.WriteLine($"Request URI: {request.RequestUri}");
+            Console.WriteLine($"Authorization Header: {authorizationHeader?.ToString()}");
+
             if (request.RequestUri.AbsolutePath.EndsWith("/api/auth/login", StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine("Bypassing auth for login endpoint");
                 return;
             }
 
-            var authorizationHeader = request.Headers.Authorization;
             if (authorizationHeader == null || authorizationHeader.Scheme != "Bearer" || string.IsNullOrEmpty(authorizationHeader.Parameter))
             {
+                Console.WriteLine("Missing or invalid Authorization header");
                 context.ErrorResult = new UnauthorizedResult(new System.Net.Http.Headers.AuthenticationHeaderValue[0], request);
                 return;
             }
 
             var token = authorizationHeader.Parameter;
-            try
+            var principal = await _tokenService.ValidateTokenAsync(token);
+
+            if (principal == null)
             {
-                var principal = await _tokenService.ValidateTokenAsync(token);
-                if (principal == null)
-                {
-                    context.ErrorResult = new UnauthorizedResult(new System.Net.Http.Headers.AuthenticationHeaderValue[0], request);
-                    return;
-                }
-                context.Principal = principal;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Token validation failed: {ex.Message}");
+                Console.WriteLine("Token validation failed");
                 context.ErrorResult = new UnauthorizedResult(new System.Net.Http.Headers.AuthenticationHeaderValue[0], request);
+                return;
             }
+
+            Console.WriteLine($"Authenticated user: {principal.Identity.Name}, Roles: {string.Join(",", principal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value))}");
+            context.Principal = principal;
         }
 
         /// <summary>

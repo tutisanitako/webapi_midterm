@@ -1,46 +1,35 @@
 ﻿using Application.DTOs;
 using Domain.Entities;
 using Domain.Interfaces;
-using System;  
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    // ApplicationException is defined in its own file: FinalAPI.Application/Services/ApplicationException.cs
-
     /// <summary>
     /// Manages business logic for Patient operations.
     /// </summary>
     public class PatientService
     {
         private readonly IRepository<Patient> _patientRepository;
-        private readonly IVisitRepository _visitRepository; // To check total billing
+        private readonly IVisitRepository _visitRepository;
 
         public PatientService(IRepository<Patient> patientRepository, IVisitRepository visitRepository)
         {
-            _patientRepository = patientRepository;
-            _visitRepository = visitRepository;
+            _patientRepository = patientRepository ?? throw new ArgumentNullException(nameof(patientRepository));
+            _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
         }
 
-        /// <summary>
-        /// Creates a new patient.
-        /// </summary>
-        /// <param name="patientDto">The DTO containing patient creation data.</param>
-        /// <returns>The created patient's read DTO.</returns>
-        /// <exception cref="ApplicationException">Thrown if validation fails (e.g., invalid birth date).</exception>
         public async Task<PatientReadDto> CreatePatientAsync(PatientCreateDto patientDto)
         {
-            // Basic validation example
             if (string.IsNullOrWhiteSpace(patientDto.FullName))
-            {
                 throw new AppServiceException("Patient full name is required.");
-            }
-            if (patientDto.BirthDate == default(DateTime) || patientDto.BirthDate > DateTime.Today)
-            {
+            if (patientDto.BirthDate == default(DateTime))
+                throw new AppServiceException("Patient birth date is required.");
+            if (patientDto.BirthDate > DateTime.Today)
                 throw new AppServiceException("Patient birth date is invalid.");
-            }
 
             var patient = new Patient
             {
@@ -58,17 +47,12 @@ namespace Application.Services
             };
         }
 
-        /// <summary>
-        /// Retrieves a patient by ID.
-        /// </summary>
-        /// <param name="id">The patient ID.</param>
-        /// <returns>The patient's read DTO, or null if not found.</returns>
         public async Task<PatientReadDto> GetPatientByIdAsync(int id)
         {
             var patient = await _patientRepository.GetByIdAsync(id);
             if (patient == null)
             {
-                return null; // Explicitly return null if not found
+                return null;
             }
 
             return new PatientReadDto
@@ -79,11 +63,7 @@ namespace Application.Services
             };
         }
 
-        /// <summary>
-        /// Retrieves all patients.
-        /// </summary>
-        /// <returns>A list of patient read DTOs.</returns>
-        public async Task<IReadOnlyList<PatientReadDto>> GetAllPatientsAsync()
+        public async Task<IReadOnlyList<PatientReadDto>> GetAllAsync()
         {
             var patients = await _patientRepository.GetAllAsync();
             return patients.Select(p => new PatientReadDto
@@ -94,21 +74,14 @@ namespace Application.Services
             }).ToList();
         }
 
-        /// <summary>
-        /// Updates an existing patient.
-        /// </summary>
-        /// <param name="patientDto">The DTO containing updated patient data.</param>
-        /// <returns>True if updated successfully, false if patient not found.</returns>
-        /// <exception cref="ApplicationException">Thrown if validation fails.</exception>
-        public async Task<bool> UpdatePatientAsync(PatientUpdateDto patientDto)
+        public async Task UpdatePatientAsync(int id, PatientCreateDto patientDto)
         {
-            var patient = await _patientRepository.GetByIdAsync(patientDto.Id);
+            var patient = await _patientRepository.GetByIdAsync(id);
             if (patient == null)
             {
-                return false; // Patient not found
+                throw new AppServiceException("Patient not found.");
             }
 
-            // Validation before updating
             if (string.IsNullOrWhiteSpace(patientDto.FullName))
             {
                 throw new AppServiceException("Patient full name is required.");
@@ -122,37 +95,25 @@ namespace Application.Services
             patient.BirthDate = patientDto.BirthDate;
 
             await _patientRepository.UpdateAsync(patient);
-            return true;
         }
 
-        /// <summary>
-        /// Deletes a patient by ID.
-        /// </summary>
-        /// <param name="id">The ID of the patient to delete.</param>
-        /// <returns>True if deleted successfully, false if patient not found.</returns>
-        public async Task<bool> DeletePatientAsync(int id)
+        public async Task DeletePatientAsync(int id)
         {
             var patient = await _patientRepository.GetByIdAsync(id);
             if (patient == null)
             {
-                return false; // Patient not found
+                throw new AppServiceException("Patient not found.");
             }
 
             await _patientRepository.DeleteAsync(id);
-            return true;
         }
 
-        /// <summary>
-        /// Calculates the total billing for a specific patient.
-        /// </summary>
-        /// <param name="patientId">The ID of the patient.</param>
-        /// <returns>A DTO containing the patient's billing summary, or null if patient not found.</returns>
         public async Task<BillingSummaryDto> CalculateTotalBillingForPatientAsync(int patientId)
         {
             var patient = await _patientRepository.GetByIdAsync(patientId);
             if (patient == null)
             {
-                return null; // Explicitly return null if patient not found
+                return null;
             }
 
             var totalFee = await _visitRepository.CalculateTotalBillingForPatientAsync(patientId);

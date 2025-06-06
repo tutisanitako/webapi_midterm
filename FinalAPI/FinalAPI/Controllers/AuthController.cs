@@ -1,42 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
-using System.Configuration;
 using FinalAPI.Middleware;
 
 namespace FinalAPI.Controllers
 {
-    /// <summary>
-    /// Controller for authentication operations.
-    /// Handles login, registration, and token generation.
-    /// </summary>
     [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
         private readonly JwtTokenService _tokenService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuthController"/> class.
-        /// </summary>
-        public AuthController()
+        public AuthController(JwtTokenService tokenService)
         {
-            var secretKey = ConfigurationManager.AppSettings["JwtSecretKey"];
-            var issuer = ConfigurationManager.AppSettings["JwtIssuer"];
-            var audience = ConfigurationManager.AppSettings["JwtAudience"];
-
-            _tokenService = new JwtTokenService(secretKey, issuer, audience);
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
-        /// <summary>
-        /// Registers a new user and returns a JWT token.
-        /// For demo purposes, using hardcoded validation.
-        /// In production, this would save to a user database.
-        /// </summary>
-        /// <param name="registerRequest">Registration credentials</param>
-        /// <returns>JWT token and user info</returns>
         [HttpPost]
         [Route("register")]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> Register(RegisterRequest registerRequest)
+        public async Task<IHttpActionResult> Register([FromBody] RegisterRequest registerRequest)
         {
             if (registerRequest == null || string.IsNullOrEmpty(registerRequest.Username) || string.IsNullOrEmpty(registerRequest.Password))
             {
@@ -62,17 +44,10 @@ namespace FinalAPI.Controllers
             });
         }
 
-        /// <summary>
-        /// Authenticates a user and returns a JWT token.
-        /// For demo purposes, using hardcoded credentials.
-        /// In production, this would validate against a user database.
-        /// </summary>
-        /// <param name="loginRequest">Login credentials</param>
-        /// <returns>JWT token and user info</returns>
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> Login(LoginRequest loginRequest)
+        public async Task<IHttpActionResult> Login([FromBody] LoginRequest loginRequest)
         {
             if (loginRequest == null || string.IsNullOrEmpty(loginRequest.Username) || string.IsNullOrEmpty(loginRequest.Password))
             {
@@ -109,61 +84,23 @@ namespace FinalAPI.Controllers
         }
     }
 
-    /// <summary>
-    /// Request model for user registration.
-    /// </summary>
     public class RegisterRequest
     {
-        /// <summary>
-        /// Gets or sets the username for registration.
-        /// </summary>
         public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password for registration.
-        /// </summary>
         public string Password { get; set; }
     }
 
-    /// <summary>
-    /// Request model for user login.
-    /// </summary>
     public class LoginRequest
     {
-        /// <summary>
-        /// Gets or sets the username for login.
-        /// </summary>
         public string Username { get; set; }
-
-        /// <summary>
-        /// Gets or sets the password for login.
-        /// </summary>
         public string Password { get; set; }
     }
 
-    /// <summary>
-    /// Response model for successful login or registration.
-    /// </summary>
     public class LoginResponse
     {
-        /// <summary>
-        /// Gets or sets the JWT token.
-        /// </summary>
         public string Token { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user ID.
-        /// </summary>
         public string UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user role.
-        /// </summary>
         public string Role { get; set; }
-
-        /// <summary>
-        /// Gets or sets the token expiration time in seconds.
-        /// </summary>
         public int ExpiresIn { get; set; }
     }
 }

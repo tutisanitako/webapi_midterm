@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Application.Services;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -9,68 +10,46 @@ using System.Web.Http.Results;
 
 namespace FinalAPI.Middleware
 {
-    /// <summary>
-    /// Global exception handler middleware for Web API.
-    /// Catches unhandled exceptions and returns a standardized error response.
-    /// </summary>
-    public class ErrorHandlingMiddleware : ExceptionHandler
+    public class ErrorHandlingMiddleware : IExceptionHandler
     {
-        /// <summary>
-        /// Handles unhandled exceptions and returns a standardized error response.
-        /// </summary>
-        /// <param name="context">The exception handler context.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        public override Task HandleAsync(ExceptionHandlerContext context, CancellationToken cancellationToken)
+        public async Task HandleAsync(ExceptionHandlerContext context, CancellationToken cancellationToken)
         {
-            Console.WriteLine($"Unhandled exception: {context.Exception}");
+            var exception = context.Exception;
 
-            var errorResponse = new
+            // Log the exception details (use a proper logging framework in production)
+            Console.WriteLine($"Error: {exception.Message}\nStackTrace: {exception.StackTrace}");
+
+            if (exception is AppServiceException)
             {
-                Message = "An unexpected error occurred.",
-                Details = context.Exception.Message,
-                StatusCode = (int)HttpStatusCode.InternalServerError
-            };
+                context.Result = new ErrorMessageResult(context.Request, HttpStatusCode.BadRequest, exception.Message);
+            }
+            else
+            {
+                context.Result = new ErrorMessageResult(context.Request, HttpStatusCode.InternalServerError,
+                    $"An unexpected error occurred: {exception.Message} (See logs for details)");
+            }
 
-            context.Result = new JsonResult<object>(errorResponse, context.Request);
-
-            return Task.CompletedTask;
-        }
-    }
-
-    /// <summary>
-    /// Custom JsonResult to return a JSON response with the specified content.
-    /// </summary>
-    /// <typeparam name="T">The type of the content.</typeparam>
-    public class JsonResult<T> : IHttpActionResult
-    {
-        private readonly T _content;
-        private readonly HttpRequestMessage _request;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JsonResult{T}"/> class.
-        /// </summary>
-        /// <param name="content">The content to return in the response.</param>
-        /// <param name="request">The HTTP request message.</param>
-        public JsonResult(T content, HttpRequestMessage request)
-        {
-            _content = content;
-            _request = request;
+            await Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Executes the result and returns an HTTP response message.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>A task that represents the asynchronous operation, containing the HTTP response message.</returns>
-        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
+        private class ErrorMessageResult : IHttpActionResult
         {
-            var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            private readonly HttpRequestMessage _request;
+            private readonly HttpStatusCode _statusCode;
+            private readonly string _message;
+
+            public ErrorMessageResult(HttpRequestMessage request, HttpStatusCode statusCode, string message)
             {
-                Content = new ObjectContent<T>(_content, new System.Net.Http.Formatting.JsonMediaTypeFormatter()),
-                RequestMessage = _request
-            };
-            return Task.FromResult(response);
+                _request = request;
+                _statusCode = statusCode;
+                _message = message;
+            }
+
+            public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
+            {
+                var response = _request.CreateResponse(_statusCode, new { error = _message });
+                return Task.FromResult(response);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
 
 namespace Domain.Entities
 {
@@ -12,13 +11,10 @@ namespace Domain.Entities
         // Navigation property for visits
         public virtual ICollection<Visit> Visits { get; set; } = new List<Visit>();
 
-        // Basic domain validation in constructor or setter
+        // Parameterless constructor for EF6
         public Doctor()
         {
-            if (string.IsNullOrWhiteSpace(FullName))
-                throw new ArgumentException("FullName cannot be empty or whitespace.");
-            if (string.IsNullOrWhiteSpace(Specialization))
-                throw new ArgumentException("Specialization cannot be empty or whitespace.");
+            // No validation in constructor; handled in service layer
         }
     }
 }

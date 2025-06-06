@@ -8,21 +8,19 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    // ApplicationException is defined in its own file: FinalAPI.Application/Services/ApplicationException.cs
-
     /// <summary>
     /// Manages business logic for Doctor operations.
-    /// As per task, only Read and Create operations are allowed for Doctors.
+    /// Supports Read and Create operations as per requirements.
     /// </summary>
     public class DoctorService
     {
         private readonly IRepository<Doctor> _doctorRepository;
-        private readonly IVisitRepository _visitRepository; // To count visits
+        private readonly IVisitRepository _visitRepository;
 
         public DoctorService(IRepository<Doctor> doctorRepository, IVisitRepository visitRepository)
         {
-            _doctorRepository = doctorRepository;
-            _visitRepository = visitRepository;
+            _doctorRepository = doctorRepository ?? throw new ArgumentNullException(nameof(doctorRepository));
+            _visitRepository = visitRepository ?? throw new ArgumentNullException(nameof(visitRepository));
         }
 
         /// <summary>
@@ -30,17 +28,14 @@ namespace Application.Services
         /// </summary>
         /// <param name="doctorDto">The DTO containing doctor creation data.</param>
         /// <returns>The created doctor's read DTO.</returns>
-        /// <exception cref="ApplicationException">Thrown if validation fails.</exception>
+        /// <exception cref="AppServiceException">Thrown if validation fails.</exception>
         public async Task<DoctorReadDto> CreateDoctorAsync(DoctorCreateDto doctorDto)
         {
+            // Validation in the service layer
             if (string.IsNullOrWhiteSpace(doctorDto.FullName))
-            {
                 throw new AppServiceException("Doctor full name is required.");
-            }
             if (string.IsNullOrWhiteSpace(doctorDto.Specialization))
-            {
                 throw new AppServiceException("Doctor specialization is required.");
-            }
 
             var doctor = new Doctor
             {
@@ -68,7 +63,7 @@ namespace Application.Services
             var doctor = await _doctorRepository.GetByIdAsync(id);
             if (doctor == null)
             {
-                return null; // Explicitly return null if not found
+                return null;
             }
 
             return new DoctorReadDto
@@ -85,7 +80,7 @@ namespace Application.Services
         /// <returns>A list of doctor read DTOs.</returns>
         public async Task<IReadOnlyList<DoctorReadDto>> GetAllDoctorsAsync()
         {
-            var doctors = (await _doctorRepository.GetAllAsync()).ToList(); // Ensure List for IReadOnlyList conversion
+            var doctors = await _doctorRepository.GetAllAsync();
             return doctors.Select(d => new DoctorReadDto
             {
                 Id = d.Id,
@@ -95,7 +90,7 @@ namespace Application.Services
         }
 
         /// <summary>
-        /// Analyzes the total number of visits for a specific doctor.
+        /// Analyzes the number of visits for a specific doctor.
         /// </summary>
         /// <param name="doctorId">The ID of the doctor.</param>
         /// <returns>A DTO containing the doctor's visit summary, or null if doctor not found.</returns>
@@ -104,7 +99,7 @@ namespace Application.Services
             var doctor = await _doctorRepository.GetByIdAsync(doctorId);
             if (doctor == null)
             {
-                return null; // Explicitly return null if doctor not found
+                return null;
             }
 
             var totalVisits = await _visitRepository.CountDoctorVisitsAsync(doctorId);
