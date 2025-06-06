@@ -1,7 +1,9 @@
-﻿using FinalAPI.Domain.Entities;
+﻿using Domain.Entities;
 using System.Data.Entity.ModelConfiguration;
+using System.ComponentModel.DataAnnotations.Schema; // Needed for IndexAnnotation
+using System.Data.Entity.Infrastructure.Annotations;
 
-namespace FinalAPI.Infrastructure.Data.Configurations
+namespace Infrastructure.Data.Configurations
 {
     public class VisitConfiguration : EntityTypeConfiguration<Visit>
     {
@@ -27,9 +29,19 @@ namespace FinalAPI.Infrastructure.Data.Configurations
                 .HasForeignKey(v => v.DoctorId)
                 .WillCascadeOnDelete(false);
 
-            // Unique constraint for PatientId + VisitDate
-            HasIndex(v => new { v.PatientId, v.VisitDate })
-                .IsUnique();
+            // UNIQUE CONSTRAINT FOR PatientId + VisitDate (EF6 way)
+            // This creates a unique non-clustered index named "IX_PatientId_VisitDate"
+            Property(v => v.VisitDate)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_PatientId_VisitDate", 1) { IsUnique = true }));
+
+            Property(v => v.PatientId)
+                .HasColumnAnnotation(
+                    IndexAnnotation.AnnotationName,
+                    new IndexAnnotation(new IndexAttribute("IX_PatientId_VisitDate", 2) { IsUnique = true }));
+            // Note: The order (1 and 2) in IndexAttribute specifies the order of columns in the composite index.
+            // It's important for `IsUnique = true` to be set on both properties for a composite unique index.
         }
     }
 }

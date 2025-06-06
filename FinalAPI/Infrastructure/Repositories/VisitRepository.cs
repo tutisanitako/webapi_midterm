@@ -1,23 +1,25 @@
-﻿using FinalAPI.Domain.Entities;
-using FinalAPI.Domain.Interfaces;
-using FinalAPI.Infrastructure.Data;
+﻿using Domain.Entities;
+using Domain.Interfaces;
+using Application.Services; // <-- THIS IS THE CORRECT USING STATEMENT
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data.Entity; // Using System.Data.Entity for EF6
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinalAPI.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class VisitRepository : RepositoryBase<Visit>, IVisitRepository
     {
-        public VisitRepository(HealthDbContext context) : base(context)
+        // No duplicate ApplicationException definition here!
+
+        public VisitRepository(DbContext context) : base(context)
         {
         }
 
         public Task<IEnumerable<Visit>> GetVisitsByDoctorAsync(int doctorId)
         {
-            var visits = _context.Visits
+            var visits = _context.Set<Visit>()
                 .Include("Patient")
                 .Include("Doctor")
                 .Where(v => v.DoctorId == doctorId)
@@ -27,7 +29,7 @@ namespace FinalAPI.Infrastructure.Repositories
 
         public Task<IEnumerable<Visit>> GetVisitsByPatientAsync(int patientId)
         {
-            var visits = _context.Visits
+            var visits = _context.Set<Visit>()
                 .Include("Patient")
                 .Include("Doctor")
                 .Where(v => v.PatientId == patientId)
@@ -46,22 +48,22 @@ namespace FinalAPI.Infrastructure.Repositories
             int pageNumber,
             int pageSize)
         {
-            var query = _context.Visits
+            var query = _context.Set<Visit>()
                 .Include("Patient")
                 .Include("Doctor")
                 .AsQueryable();
 
             // Apply filters
             if (doctorId.HasValue)
-                query = query.Where(v => v.DoctorId == doctorId);
+                query = query.Where(v => v.DoctorId == doctorId.Value);
             if (visitDateFrom.HasValue)
-                query = query.Where(v => v.VisitDate >= visitDateFrom);
+                query = query.Where(v => v.VisitDate >= visitDateFrom.Value);
             if (visitDateTo.HasValue)
-                query = query.Where(v => v.VisitDate <= visitDateTo);
+                query = query.Where(v => v.VisitDate <= visitDateTo.Value);
             if (minFee.HasValue)
-                query = query.Where(v => v.Fee >= minFee);
+                query = query.Where(v => v.Fee >= minFee.Value);
             if (maxFee.HasValue)
-                query = query.Where(v => v.Fee <= maxFee);
+                query = query.Where(v => v.Fee <= maxFee.Value);
 
             // Apply sorting
             if (!string.IsNullOrEmpty(sortBy))
@@ -84,14 +86,14 @@ namespace FinalAPI.Infrastructure.Repositories
 
         public Task<int> CountDoctorVisitsAsync(int doctorId)
         {
-            var count = _context.Visits
+            var count = _context.Set<Visit>()
                 .Count(v => v.DoctorId == doctorId);
             return Task.FromResult(count);
         }
 
         public Task<decimal> CalculateTotalBillingForPatientAsync(int patientId)
         {
-            var total = _context.Visits
+            var total = _context.Set<Visit>()
                 .Where(v => v.PatientId == patientId)
                 .Sum(v => v.Fee);
             return Task.FromResult(total);
@@ -99,7 +101,7 @@ namespace FinalAPI.Infrastructure.Repositories
 
         public Task<bool> HasVisitOnDateAsync(int patientId, DateTime visitDate)
         {
-            var hasVisit = _context.Visits
+            var hasVisit = _context.Set<Visit>()
                 .Any(v => v.PatientId == patientId && v.VisitDate.Date == visitDate.Date);
             return Task.FromResult(hasVisit);
         }

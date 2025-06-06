@@ -1,0 +1,544 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FinalAPI</name>
+    </assembly>
+    <members>
+        <member name="T:FinalAPI.BundleConfig">
+            <summary>
+            Configures bundles for CSS and JavaScript files.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.BundleConfig.RegisterBundles(System.Web.Optimization.BundleCollection)">
+            <summary>
+            Registers bundles for the application.
+            </summary>
+            <param name="bundles">The collection of bundles to configure.</param>
+        </member>
+        <member name="T:FinalAPI.App_Start.FilterConfig">
+            <summary>
+            Configures global filters for the ASP.NET MVC application.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.App_Start.FilterConfig.RegisterGlobalFilters(System.Web.Mvc.GlobalFilterCollection)">
+            <summary>
+            Registers global filters for the application.
+            </summary>
+            <param name="filters">The collection of global filters to configure.</param>
+        </member>
+        <member name="T:FinalAPI.App_Start.RouteConfig">
+            <summary>
+            Configures routing for the ASP.NET MVC application.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.App_Start.RouteConfig.RegisterRoutes(System.Web.Routing.RouteCollection)">
+            <summary>
+            Registers routes for the application.
+            </summary>
+            <param name="routes">The collection of routes to configure.</param>
+        </member>
+        <member name="T:FinalAPI.App_Start.SwaggerConfig">
+            <summary>
+            Configures Swagger for API documentation.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.App_Start.SwaggerConfig.Register">
+            <summary>
+            Registers Swagger configuration for the application.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.App_Start.AddAuthorizationHeader">
+            <summary>
+            Operation filter to add Authorization header for endpoints that require authentication.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.App_Start.AddAuthorizationHeader.Apply(Swashbuckle.Swagger.Operation,Swashbuckle.Swagger.SchemaRegistry,System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Applies the Authorization header to Swagger operations that require authentication.
+            </summary>
+            <param name="operation">The Swagger operation to modify.</param>
+            <param name="schemaRegistry">The schema registry for Swagger.</param>
+            <param name="apiDescription">The API description for the operation.</param>
+        </member>
+        <member name="T:FinalAPI.App_Start.WebApiConfig">
+            <summary>
+            Configures Web API settings and routes.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.App_Start.WebApiConfig.Register(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Registers Web API configuration and routes.
+            </summary>
+            <param name="config">The HTTP configuration to set up.</param>
+        </member>
+        <member name="T:FinalAPI.UnityConfig">
+            <summary>
+            Specifies the Unity configuration for the main container.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.UnityConfig.Container">
+            <summary>
+            Configured Unity Container.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.UnityConfig.RegisterTypes(Unity.IUnityContainer)">
+            <summary>
+            Registers the type mappings with the Unity container.
+            </summary>
+            <param name="container">The unity container to configure.</param>
+            <remarks>
+            There is no need to register concrete types such as controllers or
+            API controllers (unless you want to change the defaults), as Unity
+            allows resolving a concrete type even if it was not previously
+            registered.
+            </remarks>
+        </member>
+        <member name="T:FinalAPI.UnityWebApiActivator">
+            <summary>
+            Provides the bootstrapping for integrating Unity with WebApi when it is hosted in ASP.NET.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.UnityWebApiActivator.Start">
+            <summary>
+            Integrates Unity when the application starts.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.UnityWebApiActivator.Shutdown">
+            <summary>
+            Disposes the Unity container when the application is shut down.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.Controllers.AuthController">
+            <summary>
+            Controller for authentication operations.
+            Handles login, registration, and token generation.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.AuthController.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Controllers.AuthController"/> class.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.AuthController.Register(FinalAPI.Controllers.RegisterRequest)">
+            <summary>
+            Registers a new user and returns a JWT token.
+            For demo purposes, using hardcoded validation.
+            In production, this would save to a user database.
+            </summary>
+            <param name="registerRequest">Registration credentials</param>
+            <returns>JWT token and user info</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.AuthController.Login(FinalAPI.Controllers.LoginRequest)">
+            <summary>
+            Authenticates a user and returns a JWT token.
+            For demo purposes, using hardcoded credentials.
+            In production, this would validate against a user database.
+            </summary>
+            <param name="loginRequest">Login credentials</param>
+            <returns>JWT token and user info</returns>
+        </member>
+        <member name="T:FinalAPI.Controllers.RegisterRequest">
+            <summary>
+            Request model for user registration.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.RegisterRequest.Username">
+            <summary>
+            Gets or sets the username for registration.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.RegisterRequest.Password">
+            <summary>
+            Gets or sets the password for registration.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.Controllers.LoginRequest">
+            <summary>
+            Request model for user login.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginRequest.Username">
+            <summary>
+            Gets or sets the username for login.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginRequest.Password">
+            <summary>
+            Gets or sets the password for login.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.Controllers.LoginResponse">
+            <summary>
+            Response model for successful login or registration.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginResponse.Token">
+            <summary>
+            Gets or sets the JWT token.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginResponse.UserId">
+            <summary>
+            Gets or sets the user ID.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginResponse.Role">
+            <summary>
+            Gets or sets the user role.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Controllers.LoginResponse.ExpiresIn">
+            <summary>
+            Gets or sets the token expiration time in seconds.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.Controllers.DoctorsController">
+            <summary>
+            Controller for managing Doctor operations.
+            Provides Read and Create operations only (as per requirements).
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.#ctor(Application.Services.DoctorService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Controllers.DoctorsController"/> class.
+            </summary>
+            <param name="doctorService">The doctor service to inject.</param>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetAllDoctors">
+            <summary>
+            Gets all doctors.
+            Accessible by admin and doctor roles.
+            </summary>
+            <returns>List of doctors</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetDoctor(System.Int32)">
+            <summary>
+            Gets a specific doctor by ID.
+            Accessible by admin and doctor roles.
+            </summary>
+            <param name="id">Doctor ID</param>
+            <returns>Doctor details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.CreateDoctor(Application.DTOs.DoctorCreateDto)">
+            <summary>
+            Creates a new doctor.
+            Only admin can create doctors.
+            </summary>
+            <param name="doctorDto">Doctor creation data</param>
+            <returns>Created doctor details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetDoctorVisitsSummary(System.Int32)">
+            <summary>
+            Gets visit statistics for a specific doctor.
+            Accessible by admin and doctor roles.
+            Doctor role can only access their own statistics.
+            </summary>
+            <param name="id">Doctor ID</param>
+            <returns>Doctor visit statistics</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.Forbid">
+            <summary>
+            Helper method to return Forbidden result.
+            </summary>
+            <returns>Forbidden HTTP response</returns>
+        </member>
+        <member name="T:FinalAPI.Controllers.HomeController">
+            <summary>
+            Controller for handling home page requests.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.HomeController.Index">
+            <summary>
+            Displays the home page.
+            </summary>
+            <returns>The home page view.</returns>
+        </member>
+        <member name="T:FinalAPI.Controllers.PatientsController">
+            <summary>
+            Controller for managing Patient operations.
+            Provides full CRUD operations for patients.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.#ctor(Application.Services.PatientService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Controllers.PatientsController"/> class.
+            </summary>
+            <param name="patientService">The patient service to inject.</param>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetAllPatients">
+            <summary>
+            Gets all patients.
+            Accessible by admin and doctor roles.
+            </summary>
+            <returns>List of patients</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetPatient(System.Int32)">
+            <summary>
+            Gets a specific patient by ID.
+            Accessible by admin and doctor roles.
+            </summary>
+            <param name="id">Patient ID</param>
+            <returns>Patient details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.CreatePatient(Application.DTOs.PatientCreateDto)">
+            <summary>
+            Creates a new patient.
+            Only admin can create patients.
+            </summary>
+            <param name="patientDto">Patient creation data</param>
+            <returns>Created patient details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.UpdatePatient(System.Int32,Application.DTOs.PatientUpdateDto)">
+            <summary>
+            Updates an existing patient.
+            Only admin can update patients.
+            </summary>
+            <param name="id">Patient ID</param>
+            <param name="patientDto">Updated patient data</param>
+            <returns>Success or error response</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.DeletePatient(System.Int32)">
+            <summary>
+            Deletes a patient.
+            Only admin can delete patients.
+            </summary>
+            <param name="id">Patient ID</param>
+            <returns>Success or error response</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetPatientBilling(System.Int32)">
+            <summary>
+            Gets billing summary for a specific patient.
+            Accessible by admin and doctor roles.
+            </summary>
+            <param name="id">Patient ID</param>
+            <returns>Patient billing summary</returns>
+        </member>
+        <member name="T:FinalAPI.Controllers.ValuesController">
+            <summary>
+            Controller for managing sample values.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.ValuesController.Get">
+            <summary>
+            Retrieves all values.
+            </summary>
+            <returns>A list of string values.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.ValuesController.Get(System.Int32)">
+            <summary>
+            Retrieves a value by ID.
+            </summary>
+            <param name="id">The ID of the value to retrieve.</param>
+            <returns>The value associated with the specified ID.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.ValuesController.Post(System.String)">
+            <summary>
+            Creates a new value.
+            </summary>
+            <param name="value">The value to create.</param>
+        </member>
+        <member name="M:FinalAPI.Controllers.ValuesController.Put(System.Int32,System.String)">
+            <summary>
+            Updates an existing value.
+            </summary>
+            <param name="id">The ID of the value to update.</param>
+            <param name="value">The updated value.</param>
+        </member>
+        <member name="M:FinalAPI.Controllers.ValuesController.Delete(System.Int32)">
+            <summary>
+            Deletes a value by ID.
+            </summary>
+            <param name="id">The ID of the value to delete.</param>
+        </member>
+        <member name="T:FinalAPI.Controllers.VisitsController">
+            <summary>
+            Controller for managing Visit operations.
+            Provides full CRUD operations with pagination, filtering, and sorting.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.#ctor(Application.Services.VisitService)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Controllers.VisitsController"/> class.
+            </summary>
+            <param name="visitService">The visit service to inject.</param>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.GetVisits(System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Gets visits with pagination, filtering, and sorting.
+            Admin can see all visits, doctor can only see their own visits.
+            </summary>
+            <param name="doctorId">Filter by doctor ID</param>
+            <param name="visitDateFrom">Filter by start date</param>
+            <param name="visitDateTo">Filter by end date</param>
+            <param name="minFee">Minimum fee filter</param>
+            <param name="maxFee">Maximum fee filter</param>
+            <param name="sortBy">Sort field (Fee, VisitDate)</param>
+            <param name="sortDirection">Sort direction (asc, desc)</param>
+            <param name="pageNumber">Page number</param>
+            <param name="pageSize">Page size</param>
+            <returns>Paginated list of visits</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.GetVisit(System.Int32)">
+            <summary>
+            Gets a specific visit by ID.
+            Admin can see all visits, doctor can only see their own visits.
+            </summary>
+            <param name="id">Visit ID</param>
+            <returns>Visit details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.CreateVisit(Application.DTOs.VisitCreateDto)">
+            <summary>
+            Creates a new visit.
+            Only admin can create visits.
+            </summary>
+            <param name="visitDto">Visit creation data</param>
+            <returns>Created visit details</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.UpdateVisit(System.Int32,Application.DTOs.VisitUpdateDto)">
+            <summary>
+            Updates an existing visit.
+            Only admin can update visits.
+            </summary>
+            <param name="id">Visit ID</param>
+            <param name="visitDto">Updated visit data</param>
+            <returns>Success or error response</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.DeleteVisit(System.Int32)">
+            <summary>
+            Deletes a visit.
+            Only admin can delete visits.
+            </summary>
+            <param name="id">Visit ID</param>
+            <returns>Success or error response</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.VisitsController.Forbid">
+            <summary>
+            Helper method to return Forbidden result.
+            </summary>
+            <returns>Forbidden HTTP response</returns>
+        </member>
+        <member name="T:FinalAPI.WebApiApplication">
+            <summary>
+            Represents the entry point of the Web API application.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.WebApiApplication.Application_Start">
+            <summary>
+            Called when the application starts.
+            </summary>
+        </member>
+        <member name="T:FinalAPI.Middleware.ErrorHandlingMiddleware">
+            <summary>
+            Global exception handler middleware for Web API.
+            Catches unhandled exceptions and returns a standardized error response.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Middleware.ErrorHandlingMiddleware.HandleAsync(System.Web.Http.ExceptionHandling.ExceptionHandlerContext,System.Threading.CancellationToken)">
+            <summary>
+            Handles unhandled exceptions and returns a standardized error response.
+            </summary>
+            <param name="context">The exception handler context.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:FinalAPI.Middleware.JsonResult`1">
+            <summary>
+            Custom JsonResult to return a JSON response with the specified content.
+            </summary>
+            <typeparam name="T">The type of the content.</typeparam>
+        </member>
+        <member name="M:FinalAPI.Middleware.JsonResult`1.#ctor(`0,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.JsonResult`1"/> class.
+            </summary>
+            <param name="content">The content to return in the response.</param>
+            <param name="request">The HTTP request message.</param>
+        </member>
+        <member name="M:FinalAPI.Middleware.JsonResult`1.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executes the result and returns an HTTP response message.
+            </summary>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task that represents the asynchronous operation, containing the HTTP response message.</returns>
+        </member>
+        <member name="T:FinalAPI.Middleware.JwtAuthMiddleware">
+            <summary>
+            Middleware to handle JWT authentication for Web API.
+            Validates the JWT token and sets the user principal.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.JwtAuthMiddleware"/> class.
+            </summary>
+        </member>
+        <member name="P:FinalAPI.Middleware.JwtAuthMiddleware.AllowMultiple">
+            <summary>
+            Gets a value indicating whether multiple authentication filters are allowed.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.AuthenticateAsync(System.Web.Http.Filters.HttpAuthenticationContext,System.Threading.CancellationToken)">
+            <summary>
+            Authenticates the request by validating the JWT token.
+            </summary>
+            <param name="context">The authentication context.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.ChallengeAsync(System.Web.Http.Filters.HttpAuthenticationChallengeContext,System.Threading.CancellationToken)">
+            <summary>
+            Adds a challenge to the response if authentication fails.
+            </summary>
+            <param name="context">The authentication challenge context.</param>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult">
+            <summary>
+            Helper class to add WWW-Authenticate header on unauthorized responses.
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult.#ctor(System.Net.Http.Headers.AuthenticationHeaderValue,System.Web.Http.IHttpActionResult)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult"/> class.
+            </summary>
+            <param name="challenge">The authentication challenge to add.</param>
+            <param name="innerResult">The inner HTTP action result.</param>
+        </member>
+        <member name="M:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            Executes the result and adds the WWW-Authenticate header if unauthorized.
+            </summary>
+            <param name="cancellationToken">The cancellation token.</param>
+            <returns>A task that represents the asynchronous operation, containing the HTTP response message.</returns>
+        </member>
+        <member name="T:FinalAPI.Middleware.JwtTokenService">
+            <summary>
+            Service for generating and validating JSON Web Tokens (JWTs).
+            </summary>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtTokenService.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.JwtTokenService"/> class.
+            </summary>
+            <param name="secretKey">The secret key used for signing the JWT.</param>
+            <param name="issuer">The issuer of the JWT.</param>
+            <param name="audience">The audience for the JWT.</param>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtTokenService.GenerateTokenAsync(System.String,System.String)">
+            <summary>
+            Generates a JWT for the specified user ID and role.
+            </summary>
+            <param name="userId">The unique identifier of the user.</param>
+            <param name="role">The role of the user.</param>
+            <returns>A task that represents the asynchronous operation, containing the generated JWT as a string.</returns>
+        </member>
+        <member name="M:FinalAPI.Middleware.JwtTokenService.ValidateTokenAsync(System.String)">
+            <summary>
+            Validates a JWT and returns the associated claims principal.
+            </summary>
+            <param name="token">The JWT to validate.</param>
+            <returns>A task that represents the asynchronous operation, containing the validated <see cref="T:System.Security.Claims.ClaimsPrincipal"/> if successful; otherwise, null.</returns>
+        </member>
+    </members>
+</doc>

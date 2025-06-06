@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinalAPI.Domain.Entities
+namespace Domain.Entities
 {
     public class Visit
     {

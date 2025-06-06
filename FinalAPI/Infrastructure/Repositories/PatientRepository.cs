@@ -1,7 +1,7 @@
-﻿using FinalAPI.Domain.Entities;
-using FinalAPI.Infrastructure.Data;
+﻿using Domain.Entities;
+using Infrastructure.Data;
 
-namespace FinalAPI.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class PatientRepository : RepositoryBase<Patient>
     {

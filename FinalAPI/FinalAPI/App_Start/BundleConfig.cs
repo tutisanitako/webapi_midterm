@@ -3,8 +3,17 @@ using System.Web.Optimization;
 
 namespace FinalAPI
 {
+    /// <summary>
+    /// Configures bundles for CSS and JavaScript files.
+    /// </summary>
+
     public class BundleConfig
     {
+
+        /// <summary>
+        /// Registers bundles for the application.
+        /// </summary>
+        /// <param name="bundles">The collection of bundles to configure.</param>
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {

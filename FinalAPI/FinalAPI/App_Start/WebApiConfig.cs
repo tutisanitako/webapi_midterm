@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FinalAPI.Middleware;
+using System.Web.Http.ExceptionHandling;
 using System.Web.Http;
 
-namespace FinalAPI
+namespace FinalAPI.App_Start
 {
+    /// <summary>
+    /// Configures Web API settings and routes.
+    /// </summary>
     public static class WebApiConfig
     {
+        /// <summary>
+        /// Registers Web API configuration and routes.
+        /// </summary>
+        /// <param name="config">The HTTP configuration to set up.</param>
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
-
-            // Web API routes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
@@ -19,6 +22,8 @@ namespace FinalAPI
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Services.Replace(typeof(IExceptionHandler), new ErrorHandlingMiddleware());
         }
     }
 }

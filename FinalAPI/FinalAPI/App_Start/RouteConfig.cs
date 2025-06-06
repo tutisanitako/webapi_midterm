@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace FinalAPI
+namespace FinalAPI.App_Start
 {
+    /// <summary>
+    /// Configures routing for the ASP.NET MVC application.
+    /// </summary>
     public class RouteConfig
     {
+        /// <summary>
+        /// Registers routes for the application.
+        /// </summary>
+        /// <param name="routes">The collection of routes to configure.</param>
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

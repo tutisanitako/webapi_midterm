@@ -1,29 +1,32 @@
-﻿using FinalAPI.Domain.Interfaces;
-using FinalAPI.Infrastructure.Data;
+﻿using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+using System.Data.Entity; // Using System.Data.Entity for EF6
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinalAPI.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public abstract class RepositoryBase<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly HealthDbContext _context;
+        protected readonly DbContext _context; // Changed to System.Data.Entity.DbContext
 
-        public RepositoryBase(HealthDbContext context)
+        public RepositoryBase(DbContext context)
         {
             _context = context;
         }
 
+        // Changed return type to Task<TEntity> and handle null explicitly
         public Task<TEntity> GetByIdAsync(int id)
         {
+            // For EF6 synchronous Find, wrap in Task.FromResult
             return Task.FromResult(_context.Set<TEntity>().Find(id));
         }
 
+        // Changed return type to Task<IEnumerable<TEntity>> to match IRepository
         public Task<IEnumerable<TEntity>> GetAllAsync()
         {
+            // For EF6 synchronous AsEnumerable, wrap in Task.FromResult
             return Task.FromResult(_context.Set<TEntity>().AsEnumerable());
         }
 
@@ -43,7 +46,8 @@ namespace FinalAPI.Infrastructure.Repositories
 
         public Task DeleteAsync(int id)
         {
-            var entity = _context.Set<TEntity>().Find(id);
+            // Call the local GetByIdAsync for consistency in null check
+            var entity = _context.Set<TEntity>().Find(id); // Synchronous find for EF6
             if (entity != null)
             {
                 _context.Set<TEntity>().Remove(entity);

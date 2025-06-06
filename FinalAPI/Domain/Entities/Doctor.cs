@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace FinalAPI.Domain.Entities
+namespace Domain.Entities
 {
     public class Doctor
     {

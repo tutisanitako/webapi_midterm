@@ -1,7 +1,7 @@
-﻿using FinalAPI.Domain.Entities;
+﻿using Domain.Entities;
 using System.Data.Entity.ModelConfiguration;
 
-namespace FinalAPI.Infrastructure.Data.Configurations
+namespace Infrastructure.Data.Configurations
 {
     public class PatientConfiguration : EntityTypeConfiguration<Patient>
     {
