@@ -16,7 +16,6 @@ namespace FinalAPI.Middleware
         {
             var exception = context.Exception;
 
-            // Log the exception details (use a proper logging framework in production)
             Console.WriteLine($"Error: {exception.Message}\nStackTrace: {exception.StackTrace}");
 
             if (exception is AppServiceException)

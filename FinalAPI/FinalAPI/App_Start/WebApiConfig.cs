@@ -1,6 +1,6 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using FinalAPI.Middleware;
+using System.Web.Http.ExceptionHandling;
 
 namespace FinalAPI
 {
@@ -8,18 +8,12 @@ namespace FinalAPI
     {
         public static void Register(HttpConfiguration config)
         {
-            // Ensure DI container is configured
-            DependencyConfig.ConfigureServices();
-
-            // Enable attribute routing
             config.MapHttpAttributeRoutes();
 
-            // Resolve JwtTokenService from DI container
-            var tokenService = config.DependencyResolver.GetService(typeof(JwtTokenService)) as JwtTokenService
-                ?? throw new InvalidOperationException("JwtTokenService could not be resolved from the DI container");
-            config.Filters.Add(new JwtAuthMiddleware(tokenService));
+            config.Services.Replace(typeof(IExceptionHandler), new ErrorHandlingMiddleware());
 
-            // Default route
+            config.Filters.Add(new JwtAuthMiddleware());
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

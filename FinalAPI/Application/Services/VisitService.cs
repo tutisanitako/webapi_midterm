@@ -5,14 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace Application.Services
 {
-    // ApplicationException is defined in its own file: FinalAPI.Application/Services/ApplicationException.cs
-
-    /// <summary>
-    /// Manages business logic for Visit operations, including CRUD, pagination, filtering, and validation.
-    /// </summary>
     public class VisitService
     {
         private readonly IVisitRepository _visitRepository;
@@ -32,7 +28,7 @@ namespace Application.Services
         /// </summary>
         /// <param name="visitDto">The DTO containing visit creation data.</param>
         /// <returns>The created visit's read DTO.</returns>
-        /// <exception cref="ApplicationException">Thrown if validation fails.</exception>
+        /// <exception cref="AppServiceException">Thrown if validation fails.</exception>
         public async Task<VisitReadDto> CreateVisitAsync(VisitCreateDto visitDto)
         {
             // Validate Visit.Fee
@@ -61,9 +57,7 @@ namespace Application.Services
                 throw new AppServiceException($"Patient {patient.FullName} already has a visit on {visitDto.VisitDate.ToShortDateString()}.");
             }
 
-            // Doctor specialization validation (as per task description: "Doctor specialization must be entered when adding a visit")
-            // This implicitly means the Doctor record itself must exist and have a specialization.
-            // Since we checked if doctor exists, and our Doctor entity requires specialization, this is covered.
+            // Doctor specialization validation
             if (string.IsNullOrWhiteSpace(doctor.Specialization))
             {
                 throw new AppServiceException($"Doctor {doctor.FullName} must have a specialization defined before a visit can be created for them.");
@@ -103,12 +97,9 @@ namespace Application.Services
             var visit = await _visitRepository.GetByIdAsync(id);
             if (visit == null)
             {
-                return null; // Explicitly return null if not found
+                return null;
             }
 
-            // To populate PatientFullName and DoctorFullName in VisitReadDto,
-            // we need to explicitly load them if they are not included by default in the repository's GetByIdAsync.
-            // Our current RepositoryBase doesn't include them, so let's fetch them here.
             var patient = await _patientRepository.GetByIdAsync(visit.PatientId);
             var doctor = await _doctorRepository.GetByIdAsync(visit.DoctorId);
 
@@ -127,63 +118,87 @@ namespace Application.Services
         }
 
         /// <summary>
-        /// Retrieves a paged and filtered list of visits.
+        /// Retrieves a paged, filtered, and sorted list of visits efficiently.
         /// </summary>
         /// <param name="queryParameters">Parameters for filtering, sorting, and pagination.</param>
         /// <returns>A paged result of visit read DTOs.</returns>
         public async Task<PagedResult<VisitReadDto>> GetVisitsAsync(VisitQueryParameters queryParameters)
         {
-            // For now, assuming VisitRepository.GetVisitsWithFiltersAsync can provide the total queryable.
-            // This is not efficient for large datasets but works for now without deeper EF6 changes.
-            var allFilteredVisits = (await _visitRepository.GetVisitsWithFiltersAsync(
+
+            var baseQuery = await _visitRepository.GetFilteredVisitsQueryable(
                 queryParameters.DoctorId,
                 queryParameters.VisitDateFrom,
                 queryParameters.VisitDateTo,
                 queryParameters.MinFee,
-                queryParameters.MaxFee,
-                null, // No sorting for count
-                null, // No sorting for count
-                1, // Page 1
-                int.MaxValue // Get all for count
-            )).ToList();
+                queryParameters.MaxFee);
 
-            var totalCount = allFilteredVisits.Count();
 
-            // Then get the paginated and sorted results
-            var visits = (await _visitRepository.GetVisitsWithFiltersAsync(
-                queryParameters.DoctorId,
-                queryParameters.VisitDateFrom,
-                queryParameters.VisitDateTo,
-                queryParameters.MinFee,
-                queryParameters.MaxFee,
-                queryParameters.SortBy,
-                queryParameters.SortDirection,
-                queryParameters.PageNumber,
-                queryParameters.PageSize
-            )).ToList(); // Convert to List to ensure full enumeration
+            var totalCount = await baseQuery.CountAsync();
 
+
+            if (!string.IsNullOrEmpty(queryParameters.SortBy))
+            {
+                switch (queryParameters.SortBy.ToLower())
+                {
+                    case "fee":
+                        baseQuery = (queryParameters.SortDirection.ToLower() == "desc")
+                            ? baseQuery.OrderByDescending(v => v.Fee)
+                            : baseQuery.OrderBy(v => v.Fee);
+                        break;
+                    case "visitdate":
+                        baseQuery = (queryParameters.SortDirection.ToLower() == "desc")
+                            ? baseQuery.OrderByDescending(v => v.VisitDate)
+                            : baseQuery.OrderBy(v => v.VisitDate);
+                        break;
+                    case "patientfullname": 
+                        baseQuery = (queryParameters.SortDirection.ToLower() == "desc")
+                            ? baseQuery.OrderByDescending(v => v.Patient.FullName)
+                            : baseQuery.OrderBy(v => v.Patient.FullName);
+                        break;
+                    case "doctorfullname": 
+                        baseQuery = (queryParameters.SortDirection.ToLower() == "desc")
+                            ? baseQuery.OrderByDescending(v => v.Doctor.FullName)
+                            : baseQuery.OrderBy(v => v.Doctor.FullName);
+                        break;
+                    default:
+                        baseQuery = baseQuery.OrderBy(v => v.VisitDate);
+                        break;
+                }
+            }
+            else
+            {
+                baseQuery = baseQuery.OrderBy(v => v.VisitDate); 
+            }
+
+            var visits = await baseQuery
+                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+                .Take(queryParameters.PageSize)
+                .ToListAsync();
+
+            // 5. Map entities to DTOs
             var visitReadDtos = new List<VisitReadDto>();
             foreach (var visit in visits)
             {
-                var patient = await _patientRepository.GetByIdAsync(visit.PatientId);
-                var doctor = await _doctorRepository.GetByIdAsync(visit.DoctorId);
 
                 visitReadDtos.Add(new VisitReadDto
                 {
                     Id = visit.Id,
                     PatientId = visit.PatientId,
-                    PatientFullName = (patient != null) ? patient.FullName : "N/A",
-                    PatientBirthDate = (patient != null) ? patient.BirthDate : default(DateTime),
+                    PatientFullName = visit.Patient?.FullName ?? "N/A",
+                    PatientBirthDate = visit.Patient?.BirthDate ?? default(DateTime),
                     DoctorId = visit.DoctorId,
-                    DoctorFullName = (doctor != null) ? doctor.FullName : "N/A",
-                    DoctorSpecialization = (doctor != null) ? doctor.Specialization : "N/A",
+                    DoctorFullName = visit.Doctor?.FullName ?? "N/A",
+                    DoctorSpecialization = visit.Doctor?.Specialization ?? "N/A",
                     VisitDate = visit.VisitDate,
                     Fee = visit.Fee
                 });
             }
 
-            var totalPages = (int)Math.Ceiling((double)totalCount / queryParameters.PageSize);
+            // 6. Calculate total pages
+            var totalPages = (queryParameters.PageSize > 0) ? (int)Math.Ceiling((double)totalCount / queryParameters.PageSize) : 0;
+            if (totalPages == 0 && totalCount > 0) totalPages = 1; 
 
+            // 7. Return PagedResult
             return new PagedResult<VisitReadDto>
             {
                 Items = visitReadDtos,
@@ -194,20 +209,19 @@ namespace Application.Services
             };
         }
 
-
         /// <summary>
         /// Updates an existing visit.
         /// Includes validation for fee and patient/doctor existence.
         /// </summary>
         /// <param name="visitDto">The DTO containing updated visit data.</param>
         /// <returns>True if updated successfully, false if visit not found.</returns>
-        /// <exception cref="ApplicationException">Thrown if validation fails.</exception>
+        /// <exception cref="AppServiceException">Thrown if validation fails.</exception>
         public async Task<bool> UpdateVisitAsync(VisitUpdateDto visitDto)
         {
             var existingVisit = await _visitRepository.GetByIdAsync(visitDto.Id);
             if (existingVisit == null)
             {
-                return false; // Visit not found
+                return false;
             }
 
             // Validate Visit.Fee
@@ -230,8 +244,7 @@ namespace Application.Services
                 throw new AppServiceException($"Doctor with ID {visitDto.DoctorId} not found.");
             }
 
-            // Check if the same patient has more than one visit on the same day (excluding the current visit being updated)
-            // This is a crucial validation point for updates.
+
             if (existingVisit.PatientId != visitDto.PatientId || existingVisit.VisitDate.Date != visitDto.VisitDate.Date)
             {
                 if (await _visitRepository.HasVisitOnDateAsync(visitDto.PatientId, visitDto.VisitDate))
@@ -240,7 +253,6 @@ namespace Application.Services
                 }
             }
 
-            // Doctor specialization validation
             if (string.IsNullOrWhiteSpace(doctor.Specialization))
             {
                 throw new AppServiceException($"Doctor {doctor.FullName} must have a specialization defined before a visit can be updated for them.");
@@ -265,7 +277,7 @@ namespace Application.Services
             var visit = await _visitRepository.GetByIdAsync(id);
             if (visit == null)
             {
-                return false; // Visit not found
+                return false;
             }
 
             await _visitRepository.DeleteAsync(id);

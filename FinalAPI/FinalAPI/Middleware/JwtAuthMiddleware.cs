@@ -1,7 +1,6 @@
-﻿using FinalAPI.Middleware;
+﻿using Application.Services;
 using System;
 using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -21,9 +20,16 @@ namespace FinalAPI.Middleware
     {
         private readonly JwtTokenService _tokenService;
 
-        public JwtAuthMiddleware(JwtTokenService tokenService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JwtAuthMiddleware"/> class.
+        /// (Uses Poor Man's DI, instantiating dependencies directly)
+        /// </summary>
+        public JwtAuthMiddleware()
         {
-            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
+            var secretKey = ConfigurationManager.AppSettings["JwtSecretKey"];
+            var issuer = ConfigurationManager.AppSettings["JwtIssuer"];
+            var audience = ConfigurationManager.AppSettings["JwtAudience"];
+            _tokenService = new JwtTokenService(secretKey, issuer, audience);
         }
 
         /// <summary>
@@ -33,6 +39,7 @@ namespace FinalAPI.Middleware
 
         /// <summary>
         /// Authenticates the request by validating the JWT token.
+        /// Includes a robust bypass for [AllowAnonymous] endpoints like login and register.
         /// </summary>
         /// <param name="context">The authentication context.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -40,20 +47,25 @@ namespace FinalAPI.Middleware
         public async Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
         {
             var request = context.Request;
-            var authorizationHeader = request.Headers.Authorization;
+            var path = request.RequestUri.AbsolutePath;
 
-            Console.WriteLine($"Request URI: {request.RequestUri}");
-            Console.WriteLine($"Authorization Header: {authorizationHeader?.ToString()}");
-
-            if (request.RequestUri.AbsolutePath.EndsWith("/api/auth/login", StringComparison.OrdinalIgnoreCase))
+            if (path.EndsWith("/"))
             {
-                Console.WriteLine("Bypassing auth for login endpoint");
+                path = path.TrimEnd('/');
+            }
+            path = path.ToLowerInvariant(); 
+
+
+            if (path.EndsWith("/api/auth/login") ||
+                path.EndsWith("/api/auth/register"))
+            {
                 return;
             }
 
+            var authorizationHeader = request.Headers.Authorization;
+
             if (authorizationHeader == null || authorizationHeader.Scheme != "Bearer" || string.IsNullOrEmpty(authorizationHeader.Parameter))
             {
-                Console.WriteLine("Missing or invalid Authorization header");
                 context.ErrorResult = new UnauthorizedResult(new System.Net.Http.Headers.AuthenticationHeaderValue[0], request);
                 return;
             }
@@ -63,17 +75,17 @@ namespace FinalAPI.Middleware
 
             if (principal == null)
             {
-                Console.WriteLine("Token validation failed");
                 context.ErrorResult = new UnauthorizedResult(new System.Net.Http.Headers.AuthenticationHeaderValue[0], request);
                 return;
             }
 
-            Console.WriteLine($"Authenticated user: {principal.Identity.Name}, Roles: {string.Join(",", principal.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value))}");
             context.Principal = principal;
+
         }
 
         /// <summary>
         /// Adds a challenge to the response if authentication fails.
+        /// This method is called after AuthenticateAsync if context.ErrorResult is set.
         /// </summary>
         /// <param name="context">The authentication challenge context.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -93,6 +105,7 @@ namespace FinalAPI.Middleware
 
     /// <summary>
     /// Helper class to add WWW-Authenticate header on unauthorized responses.
+    /// This ensures clients know they need to provide a Bearer token.
     /// </summary>
     public class AddChallengeOnUnauthorizedResult : IHttpActionResult
     {
@@ -111,7 +124,7 @@ namespace FinalAPI.Middleware
         }
 
         /// <summary>
-        /// Executes the result and adds the WWW-Authenticate header if unauthorized.
+        /// Executes the result and adds the WWW-Authenticate header if the response is unauthorized.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A task that represents the asynchronous operation, containing the HTTP response message.</returns>

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
@@ -13,7 +12,7 @@ namespace Infrastructure.Repositories
 
         public RepositoryBase(DbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context = context;
         }
 
         public async Task<TEntity> GetByIdAsync(int id)
@@ -28,14 +27,12 @@ namespace Infrastructure.Repositories
 
         public async Task AddAsync(TEntity entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _context.Set<TEntity>().Add(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(TEntity entity)
         {
-            if (entity == null) throw new ArgumentNullException(nameof(entity));
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

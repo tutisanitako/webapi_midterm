@@ -1,5 +1,3 @@
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.csproj.AssemblyReference.cache
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.csproj.CoreCompileInputs.cache
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\FinalAPI.dll.config
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\FinalAPI.xml
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\FinalAPI.dll
@@ -53,10 +51,7 @@ C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.Razor.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.Deployment.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.Razor.dll
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.Abstractions.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.AspNet.WebApi.dll
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.Container.dll
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.WebApi.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\WebActivatorEx.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\WebGrease.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.ValueTuple.dll
@@ -109,10 +104,11 @@ C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.Razor.xml
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.xml
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.Deployment.xml
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\System.Web.WebPages.Razor.xml
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.Abstractions.pdb
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.AspNet.WebApi.pdb
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.AspNet.WebApi.xml
-C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Unity.Container.pdb
+C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.csproj.AssemblyReference.cache
+C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.csproj.CoreCompileInputs.cache
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.csproj.CopyComplete
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.dll
 C:\Users\tutis\source\repos\FinalAPI\FinalAPI\obj\Debug\FinalAPI.pdb
+C:\Users\tutis\source\repos\FinalAPI\FinalAPI\bin\Application.dll.config

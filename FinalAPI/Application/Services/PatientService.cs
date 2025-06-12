@@ -74,22 +74,16 @@ namespace Application.Services
             }).ToList();
         }
 
-        public async Task UpdatePatientAsync(int id, PatientCreateDto patientDto)
+        public async Task UpdatePatientAsync(int id, PatientUpdateDto patientDto)
         {
             var patient = await _patientRepository.GetByIdAsync(id);
             if (patient == null)
-            {
                 throw new AppServiceException("Patient not found.");
-            }
 
             if (string.IsNullOrWhiteSpace(patientDto.FullName))
-            {
                 throw new AppServiceException("Patient full name is required.");
-            }
             if (patientDto.BirthDate == default(DateTime) || patientDto.BirthDate > DateTime.Today)
-            {
                 throw new AppServiceException("Patient birth date is invalid.");
-            }
 
             patient.FullName = patientDto.FullName;
             patient.BirthDate = patientDto.BirthDate;

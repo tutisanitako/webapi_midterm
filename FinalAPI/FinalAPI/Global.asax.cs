@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using FinalAPI.App_Start;
 
 namespace FinalAPI
 {
@@ -8,7 +7,8 @@ namespace FinalAPI
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            // DependencyConfig.ConfigureServices(); // Remove if called in WebApiConfig.cs
+            //DependencyConfig.ConfigureServices();
+            // SwaggerConfig.Register is already called via WebActivatorEx
         }
     }
 }

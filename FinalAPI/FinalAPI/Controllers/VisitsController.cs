@@ -1,9 +1,16 @@
 ﻿using Application.DTOs;
 using Application.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Infrastructure.Repositories;
+using Infrastructure.Data;
+using System.Data.Entity;
+using Domain.Entities;
+using Domain.Interfaces;
+using System.Security.Claims;
 
 namespace FinalAPI.Controllers
 {
@@ -12,18 +19,26 @@ namespace FinalAPI.Controllers
     /// Provides full CRUD operations with pagination, filtering, and sorting.
     /// </summary>
     [RoutePrefix("api/visits")]
-    [Authorize] // All endpoints require authentication
+    [Authorize]
     public class VisitsController : ApiController
     {
         private readonly VisitService _visitService;
+        private readonly DoctorService _doctorService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VisitsController"/> class.
+        /// (Uses Poor Man's DI, instantiating dependencies directly)
         /// </summary>
-        /// <param name="visitService">The visit service to inject.</param>
-        public VisitsController(VisitService visitService)
+        public VisitsController()
         {
-            _visitService = visitService;
+            var dbContext = new HealthDbContext();
+
+            var visitRepository = new VisitRepository(dbContext);
+            var patientRepository = new PatientRepository(dbContext);
+            var doctorRepository = new DoctorRepository(dbContext);
+
+            _visitService = new VisitService(visitRepository, patientRepository, doctorRepository);
+            _doctorService = new DoctorService(doctorRepository, visitRepository);
         }
 
         /// <summary>
@@ -35,7 +50,7 @@ namespace FinalAPI.Controllers
         /// <param name="visitDateTo">Filter by end date</param>
         /// <param name="minFee">Minimum fee filter</param>
         /// <param name="maxFee">Maximum fee filter</param>
-        /// <param name="sortBy">Sort field (Fee, VisitDate)</param>
+        /// <param name="sortBy">Sort field (Fee, VisitDate, PatientFullName, DoctorFullName)</param>
         /// <param name="sortDirection">Sort direction (asc, desc)</param>
         /// <param name="pageNumber">Page number</param>
         /// <param name="pageSize">Page size</param>
@@ -57,16 +72,48 @@ namespace FinalAPI.Controllers
         {
             try
             {
-                // If user is a doctor, they can only see their own visits
+                // 1. Input Validation for Pagination and Sorting Parameters
+                if (pageNumber < 1)
+                {
+                    return BadRequest("Page number must be 1 or greater.");
+                }
+                if (pageSize < 1)
+                {
+                    return BadRequest("Page size must be 1 or greater.");
+                }
+
+                var validSortFields = new[] { "Fee", "VisitDate", "PatientFullName", "DoctorFullName" };
+                if (!string.IsNullOrEmpty(sortBy) && !validSortFields.Contains(sortBy, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest($"Invalid sortBy field. Allowed values are: {string.Join(", ", validSortFields)}");
+                }
+                var validSortDirections = new[] { "asc", "desc" };
+                if (!string.IsNullOrEmpty(sortDirection) && !validSortDirections.Contains(sortDirection, StringComparer.OrdinalIgnoreCase))
+                {
+                    return BadRequest("Invalid sortDirection. Allowed values are: 'asc' or 'desc'.");
+                }
+
+
+                // 2. Authorization Logic: Doctor can only see their own visits
                 if (User.IsInRole("doctor") && !User.IsInRole("admin"))
                 {
-                    // In a real application, you would get the current user's doctor ID from the token
-                    // For demo purposes, we'll assume doctor with ID 2
-                    var currentUserId = User.Identity.Name; // This would contain the user ID from JWT
-                    if (currentUserId == "2")
+                    var claimsPrincipal = User as ClaimsPrincipal;
+                    if (claimsPrincipal == null)
                     {
-                        doctorId = 2; // Force filter to only show this doctor's visits
+                        return Content(System.Net.HttpStatusCode.Forbidden, "Invalid user principal format. Access denied.");
                     }
+                    var doctorIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "DoctorId")?.Value;
+
+                    if (string.IsNullOrEmpty(doctorIdClaim) || !int.TryParse(doctorIdClaim, out int loggedInDoctorId))
+                    {
+                        return Content(System.Net.HttpStatusCode.Forbidden, "Doctor ID not found in token claims. Access denied.");
+                    }
+
+                    if (doctorId.HasValue && doctorId.Value != loggedInDoctorId)
+                    {
+                        return Forbid();
+                    }
+                    doctorId = loggedInDoctorId;
                 }
 
                 var queryParameters = new VisitQueryParameters
@@ -85,8 +132,13 @@ namespace FinalAPI.Controllers
                 var visits = await _visitService.GetVisitsAsync(queryParameters);
                 return Ok(visits);
             }
+            catch (AppServiceException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in GetVisits: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return InternalServerError(ex);
             }
         }
@@ -98,7 +150,7 @@ namespace FinalAPI.Controllers
         /// <param name="id">Visit ID</param>
         /// <returns>Visit details</returns>
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = "GetVisit")]
         [Authorize(Roles = "admin,doctor")]
         [ResponseType(typeof(VisitReadDto))]
         public async Task<IHttpActionResult> GetVisit(int id)
@@ -111,13 +163,23 @@ namespace FinalAPI.Controllers
                     return NotFound();
                 }
 
-                // If user is a doctor, they can only see their own visits
                 if (User.IsInRole("doctor") && !User.IsInRole("admin"))
                 {
-                    var currentUserId = User.Identity.Name;
-                    if (currentUserId == "2" && visit.DoctorId != 2)
+                    var claimsPrincipal = User as ClaimsPrincipal;
+                    if (claimsPrincipal == null)
                     {
-                        return Forbid();
+                        return Content(System.Net.HttpStatusCode.Forbidden, "Invalid user principal format. Access denied.");
+                    }
+                    var doctorIdClaim = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "DoctorId")?.Value;
+
+                    if (string.IsNullOrEmpty(doctorIdClaim) || !int.TryParse(doctorIdClaim, out int loggedInDoctorId))
+                    {
+                        return Content(System.Net.HttpStatusCode.Forbidden, "Doctor ID not found in token claims. Access denied.");
+                    }
+
+                    if (visit.DoctorId != loggedInDoctorId)
+                    {
+                        return Forbid(); 
                     }
                 }
 
@@ -125,6 +187,7 @@ namespace FinalAPI.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in GetVisit: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return InternalServerError(ex);
             }
         }
@@ -149,7 +212,7 @@ namespace FinalAPI.Controllers
             try
             {
                 var createdVisit = await _visitService.CreateVisitAsync(visitDto);
-                return CreatedAtRoute("DefaultApi", new { id = createdVisit.Id }, createdVisit);
+                return CreatedAtRoute("GetVisit", new { id = createdVisit.Id }, createdVisit);
             }
             catch (AppServiceException ex)
             {
@@ -157,6 +220,7 @@ namespace FinalAPI.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in CreateVisit: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return InternalServerError(ex);
             }
         }
@@ -188,7 +252,7 @@ namespace FinalAPI.Controllers
                 var success = await _visitService.UpdateVisitAsync(visitDto);
                 if (!success)
                 {
-                    return NotFound();
+                    return NotFound(); 
                 }
                 return Ok();
             }
@@ -198,6 +262,7 @@ namespace FinalAPI.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in UpdateVisit: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return InternalServerError(ex);
             }
         }
@@ -218,12 +283,13 @@ namespace FinalAPI.Controllers
                 var success = await _visitService.DeleteVisitAsync(id);
                 if (!success)
                 {
-                    return NotFound();
+                    return NotFound(); 
                 }
                 return Ok();
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error in DeleteVisit: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return InternalServerError(ex);
             }
         }

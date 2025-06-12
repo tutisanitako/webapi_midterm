@@ -15,6 +15,12 @@
             </summary>
             <param name="bundles">The collection of bundles to configure.</param>
         </member>
+        <member name="T:FinalAPI.App_Start.CustomControllerActivator">
+            <summary>
+            Custom IHttpControllerActivator to integrate with Microsoft.Extensions.DependencyInjection.
+            This allows Web API to resolve controllers and their dependencies from the configured DI container.
+            </summary>
+        </member>
         <member name="T:FinalAPI.App_Start.FilterConfig">
             <summary>
             Configures global filters for the ASP.NET MVC application.
@@ -60,6 +66,37 @@
             <param name="schemaRegistry">The schema registry for Swagger.</param>
             <param name="apiDescription">The API description for the operation.</param>
         </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetAllDoctors">
+            <summary>
+            Retrieves all doctors.
+            Accessible by admin and doctors (doctors can view all profiles).
+            </summary>
+            <returns>A list of doctor read DTOs.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetDoctor(System.Int32)">
+            <summary>
+            Retrieves a doctor by ID.
+            Accessible by admin and doctors (doctors can view any profile by ID).
+            </summary>
+            <param name="id">The doctor ID.</param>
+            <returns>The doctor's read DTO, or not found.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.CreateDoctor(Application.DTOs.DoctorCreateDto)">
+            <summary>
+            Creates a new doctor.
+            Only accessible by admin.
+            </summary>
+            <param name="doctorDto">The DTO containing doctor creation data.</param>
+            <returns>The created doctor's read DTO.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.DoctorsController.GetDoctorVisitsSummary(System.Int32)">
+            <summary>
+            Analyzes the number of visits for a specific doctor.
+            Admin can see any doctor's summary; a doctor can only see their own summary.
+            </summary>
+            <param name="id">The ID of the doctor to analyze.</param>
+            <returns>A DTO containing the doctor's visit summary, or not found/forbidden.</returns>
+        </member>
         <member name="T:FinalAPI.Controllers.HomeController">
             <summary>
             Controller for handling home page requests.
@@ -70,6 +107,54 @@
             Displays the home page.
             </summary>
             <returns>The home page view.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetAll">
+            <summary>
+            Retrieves all patients.
+            Only accessible by admin.
+            </summary>
+            <returns>A list of patient read DTOs.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetPatient(System.Int32)">
+            <summary>
+            Retrieves a patient by ID.
+            Only accessible by admin.
+            </summary>
+            <param name="id">The patient ID.</param>
+            <returns>The patient's read DTO, or not found.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.CreatePatient(Application.DTOs.PatientCreateDto)">
+            <summary>
+            Creates a new patient.
+            Only accessible by admin.
+            </summary>
+            <param name="patientDto">The DTO containing patient creation data.</param>
+            <returns>The created patient's read DTO.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.UpdatePatient(System.Int32,Application.DTOs.PatientUpdateDto)">
+            <summary>
+            Updates an existing patient.
+            Only accessible by admin.
+            </summary>
+            <param name="id">The ID of the patient to update.</param>
+            <param name="patientDto">The DTO containing updated patient data.</param>
+            <returns>Success or error response.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.DeletePatient(System.Int32)">
+            <summary>
+            Deletes a patient by ID.
+            Only accessible by admin.
+            </summary>
+            <param name="id">The ID of the patient to delete.</param>
+            <returns>Success or error response.</returns>
+        </member>
+        <member name="M:FinalAPI.Controllers.PatientsController.GetPatientBillingSummary(System.Int32)">
+            <summary>
+            Calculates and retrieves the total billing summary for a specific patient.
+            Only accessible by admin.
+            </summary>
+            <param name="id">The ID of the patient.</param>
+            <returns>A DTO containing the patient's billing summary, or not found.</returns>
         </member>
         <member name="T:FinalAPI.Controllers.ValuesController">
             <summary>
@@ -114,11 +199,11 @@
             Provides full CRUD operations with pagination, filtering, and sorting.
             </summary>
         </member>
-        <member name="M:FinalAPI.Controllers.VisitsController.#ctor(Application.Services.VisitService)">
+        <member name="M:FinalAPI.Controllers.VisitsController.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:FinalAPI.Controllers.VisitsController"/> class.
+            (Uses Poor Man's DI, instantiating dependencies directly)
             </summary>
-            <param name="visitService">The visit service to inject.</param>
         </member>
         <member name="M:FinalAPI.Controllers.VisitsController.GetVisits(System.Nullable{System.Int32},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.Int32,System.Int32)">
             <summary>
@@ -130,7 +215,7 @@
             <param name="visitDateTo">Filter by end date</param>
             <param name="minFee">Minimum fee filter</param>
             <param name="maxFee">Maximum fee filter</param>
-            <param name="sortBy">Sort field (Fee, VisitDate)</param>
+            <param name="sortBy">Sort field (Fee, VisitDate, PatientFullName, DoctorFullName)</param>
             <param name="sortDirection">Sort direction (asc, desc)</param>
             <param name="pageNumber">Page number</param>
             <param name="pageSize">Page size</param>
@@ -181,6 +266,12 @@
             Validates the JWT token and sets the user principal.
             </summary>
         </member>
+        <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.JwtAuthMiddleware"/> class.
+            (Uses Poor Man's DI, instantiating dependencies directly)
+            </summary>
+        </member>
         <member name="P:FinalAPI.Middleware.JwtAuthMiddleware.AllowMultiple">
             <summary>
             Gets a value indicating whether multiple authentication filters are allowed.
@@ -189,6 +280,7 @@
         <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.AuthenticateAsync(System.Web.Http.Filters.HttpAuthenticationContext,System.Threading.CancellationToken)">
             <summary>
             Authenticates the request by validating the JWT token.
+            Includes a robust bypass for [AllowAnonymous] endpoints like login and register.
             </summary>
             <param name="context">The authentication context.</param>
             <param name="cancellationToken">The cancellation token.</param>
@@ -197,6 +289,7 @@
         <member name="M:FinalAPI.Middleware.JwtAuthMiddleware.ChallengeAsync(System.Web.Http.Filters.HttpAuthenticationChallengeContext,System.Threading.CancellationToken)">
             <summary>
             Adds a challenge to the response if authentication fails.
+            This method is called after AuthenticateAsync if context.ErrorResult is set.
             </summary>
             <param name="context">The authentication challenge context.</param>
             <param name="cancellationToken">The cancellation token.</param>
@@ -205,6 +298,7 @@
         <member name="T:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult">
             <summary>
             Helper class to add WWW-Authenticate header on unauthorized responses.
+            This ensures clients know they need to provide a Bearer token.
             </summary>
         </member>
         <member name="M:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult.#ctor(System.Net.Http.Headers.AuthenticationHeaderValue,System.Web.Http.IHttpActionResult)">
@@ -216,38 +310,10 @@
         </member>
         <member name="M:FinalAPI.Middleware.AddChallengeOnUnauthorizedResult.ExecuteAsync(System.Threading.CancellationToken)">
             <summary>
-            Executes the result and adds the WWW-Authenticate header if unauthorized.
+            Executes the result and adds the WWW-Authenticate header if the response is unauthorized.
             </summary>
             <param name="cancellationToken">The cancellation token.</param>
             <returns>A task that represents the asynchronous operation, containing the HTTP response message.</returns>
-        </member>
-        <member name="T:FinalAPI.Middleware.JwtTokenService">
-            <summary>
-            Service for generating and validating JSON Web Tokens (JWTs).
-            </summary>
-        </member>
-        <member name="M:FinalAPI.Middleware.JwtTokenService.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:FinalAPI.Middleware.JwtTokenService"/> class.
-            </summary>
-            <param name="secretKey">The secret key used for signing the JWT.</param>
-            <param name="issuer">The issuer of the JWT.</param>
-            <param name="audience">The audience for the JWT.</param>
-        </member>
-        <member name="M:FinalAPI.Middleware.JwtTokenService.GenerateTokenAsync(System.String,System.String)">
-            <summary>
-            Generates a JWT for the specified user ID and role.
-            </summary>
-            <param name="userId">The unique identifier of the user.</param>
-            <param name="role">The role of the user.</param>
-            <returns>A task that represents the asynchronous operation, containing the generated JWT as a string.</returns>
-        </member>
-        <member name="M:FinalAPI.Middleware.JwtTokenService.ValidateTokenAsync(System.String)">
-            <summary>
-            Validates a JWT and returns the associated claims principal.
-            </summary>
-            <param name="token">The JWT to validate.</param>
-            <returns>A task that represents the asynchronous operation, containing the validated <see cref="T:System.Security.Claims.ClaimsPrincipal"/> if successful; otherwise, null.</returns>
         </member>
     </members>
 </doc>

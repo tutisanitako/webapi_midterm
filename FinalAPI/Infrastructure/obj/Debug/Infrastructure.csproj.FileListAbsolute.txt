@@ -161,3 +161,4 @@ C:\Users\tutis\source\repos\FinalAPI\Infrastructure\obj\Debug\Infrastructure.csp
 C:\Users\tutis\source\repos\FinalAPI\Infrastructure\obj\Debug\Infrastructure.csproj.CopyComplete
 C:\Users\tutis\source\repos\FinalAPI\Infrastructure\obj\Debug\Infrastructure.dll
 C:\Users\tutis\source\repos\FinalAPI\Infrastructure\obj\Debug\Infrastructure.pdb
+C:\Users\tutis\source\repos\FinalAPI\Infrastructure\bin\Debug\Application.dll.config

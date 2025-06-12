@@ -18,3 +18,8 @@ C:\Users\tutis\source\repos\FinalAPI\Application\obj\Debug\Application.csproj.Co
 C:\Users\tutis\source\repos\FinalAPI\Application\obj\Debug\Application.csproj.CopyComplete
 C:\Users\tutis\source\repos\FinalAPI\Application\obj\Debug\Application.dll
 C:\Users\tutis\source\repos\FinalAPI\Application\obj\Debug\Application.pdb
+C:\Users\tutis\source\repos\FinalAPI\Application\bin\Debug\Application.dll.config
+C:\Users\tutis\source\repos\FinalAPI\Application\bin\Debug\EntityFramework.dll
+C:\Users\tutis\source\repos\FinalAPI\Application\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\tutis\source\repos\FinalAPI\Application\bin\Debug\EntityFramework.xml
+C:\Users\tutis\source\repos\FinalAPI\Application\bin\Debug\EntityFramework.SqlServer.xml

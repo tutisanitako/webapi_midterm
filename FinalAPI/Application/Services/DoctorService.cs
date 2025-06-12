@@ -31,7 +31,6 @@ namespace Application.Services
         /// <exception cref="AppServiceException">Thrown if validation fails.</exception>
         public async Task<DoctorReadDto> CreateDoctorAsync(DoctorCreateDto doctorDto)
         {
-            // Validation in the service layer
             if (string.IsNullOrWhiteSpace(doctorDto.FullName))
                 throw new AppServiceException("Doctor full name is required.");
             if (string.IsNullOrWhiteSpace(doctorDto.Specialization))

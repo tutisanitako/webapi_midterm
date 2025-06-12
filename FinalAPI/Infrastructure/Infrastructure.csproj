@@ -167,6 +167,7 @@
     <Compile Include="Repositories\PatientRepository.cs" />
     <Compile Include="Repositories\RepositoryBase.cs" />
     <Compile Include="Repositories\VisitRepository.cs" />
+    <Compile Include="Security\JwtTokenService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj">

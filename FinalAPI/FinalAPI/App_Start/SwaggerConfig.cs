@@ -86,7 +86,7 @@ namespace FinalAPI.App_Start
                 {
                     name = "Authorization",
                     @in = "header",
-                    description = "Bearer token",
+                    description = "Bearer token (e.g., Bearer <your-token>)",
                     required = true,
                     type = "string"
                 });
