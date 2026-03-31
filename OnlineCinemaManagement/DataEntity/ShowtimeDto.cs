@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace DataEntity
 {
+    [DataContract]
     public class ShowtimeDto
     {
-        public int ShowtimeID { get; set; }
-        public int MovieID { get; set; }
-        public int HallID { get; set; }
-        public DateTime Showtime { get; set; }
-        public decimal TicketPrice { get; set; }
-
-        // Optional: Related data
-        public string MovieTitle { get; set; }
-        public string HallName { get; set; }
+        [DataMember] public int ShowtimeID { get; set; }
+        [DataMember] public int? MovieID { get; set; }
+        [DataMember] public int? HallID { get; set; }
+        [DataMember] public DateTime Showtime { get; set; }
+        [DataMember] public decimal TicketPrice { get; set; }
+        // Populated from navigation properties
+        [DataMember] public string MovieTitle { get; set; }
+        [DataMember] public string HallName { get; set; }
     }
 }

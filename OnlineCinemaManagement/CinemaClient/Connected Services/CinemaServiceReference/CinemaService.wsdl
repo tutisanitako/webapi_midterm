@@ -37,6 +37,18 @@
   <wsdl:message name="ICinemaService_DeleteShowtime_OutputMessage">
     <wsdl:part name="parameters" element="tns:DeleteShowtimeResponse" />
   </wsdl:message>
+  <wsdl:message name="ICinemaService_GetAllMovies_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllMovies" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetAllMovies_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllMoviesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetAllHalls_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHalls" />
+  </wsdl:message>
+  <wsdl:message name="ICinemaService_GetAllHalls_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllHallsResponse" />
+  </wsdl:message>
   <wsdl:portType name="ICinemaService">
     <wsdl:operation name="GetAllShowtimes">
       <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/GetAllShowtimes" message="tns:ICinemaService_GetAllShowtimes_InputMessage" />
@@ -57,6 +69,14 @@
     <wsdl:operation name="DeleteShowtime">
       <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/DeleteShowtime" message="tns:ICinemaService_DeleteShowtime_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/DeleteShowtimeResponse" message="tns:ICinemaService_DeleteShowtime_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllMovies">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/GetAllMovies" message="tns:ICinemaService_GetAllMovies_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/GetAllMoviesResponse" message="tns:ICinemaService_GetAllMovies_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllHalls">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICinemaService/GetAllHalls" message="tns:ICinemaService_GetAllHalls_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICinemaService/GetAllHallsResponse" message="tns:ICinemaService_GetAllHalls_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ICinemaService" type="tns:ICinemaService">
@@ -99,6 +119,24 @@
     </wsdl:operation>
     <wsdl:operation name="DeleteShowtime">
       <soap:operation soapAction="http://tempuri.org/ICinemaService/DeleteShowtime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllMovies">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/GetAllMovies" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllHalls">
+      <soap:operation soapAction="http://tempuri.org/ICinemaService/GetAllHalls" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

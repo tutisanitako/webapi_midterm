@@ -8,9 +8,9 @@
   <xs:element name="ArrayOfShowtimeDto" nillable="true" type="tns:ArrayOfShowtimeDto" />
   <xs:complexType name="ShowtimeDto">
     <xs:sequence>
-      <xs:element minOccurs="0" name="HallID" type="xs:int" />
+      <xs:element minOccurs="0" name="HallID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="HallName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="MovieID" type="xs:int" />
+      <xs:element minOccurs="0" name="MovieID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="MovieTitle" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Showtime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ShowtimeID" type="xs:int" />
@@ -18,4 +18,30 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ShowtimeDto" nillable="true" type="tns:ShowtimeDto" />
+  <xs:complexType name="ArrayOfMovieDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MovieDto" nillable="true" type="tns:MovieDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMovieDto" nillable="true" type="tns:ArrayOfMovieDto" />
+  <xs:complexType name="MovieDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MovieID" type="xs:int" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MovieDto" nillable="true" type="tns:MovieDto" />
+  <xs:complexType name="ArrayOfHallDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="HallDto" nillable="true" type="tns:HallDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfHallDto" nillable="true" type="tns:ArrayOfHallDto" />
+  <xs:complexType name="HallDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HallID" type="xs:int" />
+      <xs:element minOccurs="0" name="HallName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HallDto" nillable="true" type="tns:HallDto" />
 </xs:schema>

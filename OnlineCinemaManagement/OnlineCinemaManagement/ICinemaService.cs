@@ -1,11 +1,7 @@
 ﻿using DataEntity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
 
 namespace OnlineCinemaManagement
 {
@@ -13,7 +9,7 @@ namespace OnlineCinemaManagement
     public interface ICinemaService
     {
         [OperationContract]
-        [WebGet(ResponseFormat = WebMessageFormat.Json)]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetShowtimes")]
         List<ShowtimeDto> GetAllShowtimes();
 
         [OperationContract]
@@ -34,5 +30,13 @@ namespace OnlineCinemaManagement
         [WebInvoke(Method = "DELETE", ResponseFormat = WebMessageFormat.Json,
                    UriTemplate = "DeleteShowtime/{id}")]
         void DeleteShowtime(string id);
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetMovies")]
+        List<MovieDto> GetAllMovies();
+
+        [OperationContract]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "GetHalls")]
+        List<HallDto> GetAllHalls();
     }
 }

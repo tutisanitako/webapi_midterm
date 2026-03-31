@@ -61,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Connected Services\CinemaServiceReference\CinemaClient.CinemaServiceReference.HallDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\CinemaServiceReference\CinemaClient.CinemaServiceReference.MovieDto.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\CinemaServiceReference\CinemaClient.CinemaServiceReference.ShowtimeDto.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

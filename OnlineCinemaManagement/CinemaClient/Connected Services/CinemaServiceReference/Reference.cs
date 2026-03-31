@@ -23,13 +23,13 @@ namespace CinemaClient.CinemaServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int HallIDField;
+        private System.Nullable<int> HallIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string HallNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int MovieIDField;
+        private System.Nullable<int> MovieIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MovieTitleField;
@@ -54,7 +54,7 @@ namespace CinemaClient.CinemaServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int HallID {
+        public System.Nullable<int> HallID {
             get {
                 return this.HallIDField;
             }
@@ -80,7 +80,7 @@ namespace CinemaClient.CinemaServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int MovieID {
+        public System.Nullable<int> MovieID {
             get {
                 return this.MovieIDField;
             }
@@ -154,6 +154,128 @@ namespace CinemaClient.CinemaServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MovieDto", Namespace="http://schemas.datacontract.org/2004/07/DataEntity")]
+    [System.SerializableAttribute()]
+    public partial class MovieDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MovieIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TitleField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MovieID {
+            get {
+                return this.MovieIDField;
+            }
+            set {
+                if ((this.MovieIDField.Equals(value) != true)) {
+                    this.MovieIDField = value;
+                    this.RaisePropertyChanged("MovieID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Title {
+            get {
+                return this.TitleField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TitleField, value) != true)) {
+                    this.TitleField = value;
+                    this.RaisePropertyChanged("Title");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="HallDto", Namespace="http://schemas.datacontract.org/2004/07/DataEntity")]
+    [System.SerializableAttribute()]
+    public partial class HallDto : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int HallIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HallNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int HallID {
+            get {
+                return this.HallIDField;
+            }
+            set {
+                if ((this.HallIDField.Equals(value) != true)) {
+                    this.HallIDField = value;
+                    this.RaisePropertyChanged("HallID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string HallName {
+            get {
+                return this.HallNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HallNameField, value) != true)) {
+                    this.HallNameField = value;
+                    this.RaisePropertyChanged("HallName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CinemaServiceReference.ICinemaService")]
     public interface ICinemaService {
@@ -165,10 +287,10 @@ namespace CinemaClient.CinemaServiceReference {
         System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.ShowtimeDto[]> GetAllShowtimesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetShowtimeById", ReplyAction="http://tempuri.org/ICinemaService/GetShowtimeByIdResponse")]
-        CinemaClient.CinemaServiceReference.ShowtimeDto GetShowtimeById(int id);
+        CinemaClient.CinemaServiceReference.ShowtimeDto GetShowtimeById(string id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetShowtimeById", ReplyAction="http://tempuri.org/ICinemaService/GetShowtimeByIdResponse")]
-        System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.ShowtimeDto> GetShowtimeByIdAsync(int id);
+        System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.ShowtimeDto> GetShowtimeByIdAsync(string id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/AddShowtime", ReplyAction="http://tempuri.org/ICinemaService/AddShowtimeResponse")]
         void AddShowtime(CinemaClient.CinemaServiceReference.ShowtimeDto showtimeDto);
@@ -183,10 +305,22 @@ namespace CinemaClient.CinemaServiceReference {
         System.Threading.Tasks.Task UpdateShowtimeAsync(CinemaClient.CinemaServiceReference.ShowtimeDto showtimeDto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/DeleteShowtime", ReplyAction="http://tempuri.org/ICinemaService/DeleteShowtimeResponse")]
-        void DeleteShowtime(int id);
+        void DeleteShowtime(string id);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/DeleteShowtime", ReplyAction="http://tempuri.org/ICinemaService/DeleteShowtimeResponse")]
-        System.Threading.Tasks.Task DeleteShowtimeAsync(int id);
+        System.Threading.Tasks.Task DeleteShowtimeAsync(string id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetAllMovies", ReplyAction="http://tempuri.org/ICinemaService/GetAllMoviesResponse")]
+        CinemaClient.CinemaServiceReference.MovieDto[] GetAllMovies();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetAllMovies", ReplyAction="http://tempuri.org/ICinemaService/GetAllMoviesResponse")]
+        System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.MovieDto[]> GetAllMoviesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetAllHalls", ReplyAction="http://tempuri.org/ICinemaService/GetAllHallsResponse")]
+        CinemaClient.CinemaServiceReference.HallDto[] GetAllHalls();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ICinemaService/GetAllHalls", ReplyAction="http://tempuri.org/ICinemaService/GetAllHallsResponse")]
+        System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.HallDto[]> GetAllHallsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -224,11 +358,11 @@ namespace CinemaClient.CinemaServiceReference {
             return base.Channel.GetAllShowtimesAsync();
         }
         
-        public CinemaClient.CinemaServiceReference.ShowtimeDto GetShowtimeById(int id) {
+        public CinemaClient.CinemaServiceReference.ShowtimeDto GetShowtimeById(string id) {
             return base.Channel.GetShowtimeById(id);
         }
         
-        public System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.ShowtimeDto> GetShowtimeByIdAsync(int id) {
+        public System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.ShowtimeDto> GetShowtimeByIdAsync(string id) {
             return base.Channel.GetShowtimeByIdAsync(id);
         }
         
@@ -248,12 +382,28 @@ namespace CinemaClient.CinemaServiceReference {
             return base.Channel.UpdateShowtimeAsync(showtimeDto);
         }
         
-        public void DeleteShowtime(int id) {
+        public void DeleteShowtime(string id) {
             base.Channel.DeleteShowtime(id);
         }
         
-        public System.Threading.Tasks.Task DeleteShowtimeAsync(int id) {
+        public System.Threading.Tasks.Task DeleteShowtimeAsync(string id) {
             return base.Channel.DeleteShowtimeAsync(id);
+        }
+        
+        public CinemaClient.CinemaServiceReference.MovieDto[] GetAllMovies() {
+            return base.Channel.GetAllMovies();
+        }
+        
+        public System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.MovieDto[]> GetAllMoviesAsync() {
+            return base.Channel.GetAllMoviesAsync();
+        }
+        
+        public CinemaClient.CinemaServiceReference.HallDto[] GetAllHalls() {
+            return base.Channel.GetAllHalls();
+        }
+        
+        public System.Threading.Tasks.Task<CinemaClient.CinemaServiceReference.HallDto[]> GetAllHallsAsync() {
+            return base.Channel.GetAllHallsAsync();
         }
     }
 }
